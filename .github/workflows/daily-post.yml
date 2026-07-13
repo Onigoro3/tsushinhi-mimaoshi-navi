@@ -1,4 +1,4 @@
-name: Daily Auto Post (Demon - 通信費見直しナビ)
+name: Daily Auto Post (Demon - 海外SIM・eSIM比較ガイド)
 
 # 毎日 JST 11:00 に自動実行(UTC 2:00 = JST 11:00)。
 # Dragon(型落ち家電ラボ, JST 9:00)・Angel(型落ちガジェット比較所, JST 10:00)と
@@ -34,7 +34,6 @@ jobs:
           HATENA_ID: ${{ secrets.HATENA_ID }}
           HATENA_BLOG_DOMAIN: ${{ secrets.HATENA_BLOG_DOMAIN }}
           HATENA_API_KEY: ${{ secrets.HATENA_API_KEY }}
-          A8_AFFILIATE_ID: ${{ secrets.A8_AFFILIATE_ID }}
         run: python main.py
 
       # 実行失敗時の通知拡張ポイント:

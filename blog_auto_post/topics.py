@@ -8,6 +8,10 @@ Dragon(`app/blog_auto_post/topics.py`)・Angel(`angel/app/blog_auto_post/topics.
 キュー管理ロジック自体は同一(移植)。トピックの各エントリが持つフィールドのみDemon独自で、
 `search_queries`(検索クエリ文字列)の代わりに `plan_ids`(plans.json内のプランID配列)を
 持つ点が異なる(データソースがAPI検索ではなくローカルJSON参照であるため)。
+
+2026-07-13、ブログのジャンルが「通信費比較」から「海外eSIM比較」へ全面ピボットしたが、
+本モジュール自体はジャンルに依存しないキュー管理ロジックのため無改修(`data/topics.json`
+側の内容のみeSIM向けに作り直した)。
 """
 from __future__ import annotations
 

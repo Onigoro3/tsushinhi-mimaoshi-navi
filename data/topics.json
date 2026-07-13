@@ -1,119 +1,132 @@
 [
   {
-    "id": "mineo-vs-iijmio",
-    "title": "mineo vs IIJmio 徹底比較!格安SIMどっちがお得?",
-    "category": "格安SIM",
+    "id": "usa-7days-3sha",
+    "title": "アメリカ 7日間 eSIM徹底比較!トリファ・airalo・Saily どれがお得?",
+    "category": "3社比較",
     "plan_ids": [
-      "mineo-mypita-dual-15gb",
-      "iijmio-gigaplan-voice-5gb"
-    ],
-    "used": true,
-    "used_at": "2026-07-13T02:25:30+00:00",
-    "use_count": 1
-  },
-  {
-    "id": "ahamo-vs-linemo",
-    "title": "ahamo vs LINEMO 比較!オンライン専用プランで通信費はどこまで安くなる?",
-    "category": "オンライン専用プラン",
-    "plan_ids": [
-      "ahamo-30gb",
-      "linemo-bestplan-3gb"
+      "trifa-global-unlimited-7d",
+      "airalo-usa-unlimited-7d",
+      "saily-usa-unlimited-7d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "uq-vs-ymobile",
-    "title": "UQ mobile vs ワイモバイル 比較!サブブランドはどっちを選ぶべき?",
-    "category": "サブブランド",
+    "id": "europe-30days-3sha",
+    "title": "ヨーロッパ周遊 eSIMどれがお得?30日間プランをトリファ・airalo・Sailyで徹底比較",
+    "category": "3社比較",
     "plan_ids": [
-      "uqmobile-kurikoshi-m-plus5g-17gb",
-      "ymobile-simple3-s-5gb"
+      "trifa-global-unlimited-30d",
+      "airalo-europe-unlimited-30d",
+      "saily-europe-10gb-30d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "mvno-5sha-hikaku",
-    "title": "格安SIM主要5社 徹底比較(mineo・IIJmio・BIGLOBE・UQ mobile・ワイモバイル)",
-    "category": "格安SIM",
+    "id": "korea-tanki-3sha",
+    "title": "韓国弾丸旅行(3〜7日)のeSIM比較!トリファ・airalo・Sailyで一番お得なのは?",
+    "category": "3社比較",
     "plan_ids": [
-      "mineo-mypita-dual-15gb",
-      "iijmio-gigaplan-voice-5gb",
-      "biglobe-mobile-planm-6gb",
-      "uqmobile-kurikoshi-m-plus5g-17gb",
-      "ymobile-simple3-s-5gb"
+      "trifa-global-1gb-3d",
+      "airalo-korea-unlimited-3d",
+      "saily-korea-1gb-7d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "hikari-nuro-vs-au",
-    "title": "光回線 乗り換えでいくら安くなる?NURO光 vs auひかり 徹底比較",
-    "category": "光回線",
+    "id": "taiwan-30days-3sha",
+    "title": "台湾ロングステイ(30日間)のeSIM徹底比較!トリファ・airalo・Saily",
+    "category": "3社比較",
     "plan_ids": [
-      "nuro-hikari-2giga-3y",
-      "au-hikari-home-1giga-zutto"
+      "trifa-global-unlimited-30d",
+      "airalo-taiwan-unlimited-30d",
+      "saily-taiwan-unlimited-30d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "15gb-hikaku",
-    "title": "データ容量15GB前後で選ぶ格安SIM比較(mineo vs UQ mobile)",
-    "category": "格安SIM",
+    "id": "airalo-usa-duration",
+    "title": "airaloのアメリカeSIM、日数別プラン徹底比較(3日〜40日)",
+    "category": "airalo単体比較",
     "plan_ids": [
-      "mineo-mypita-dual-15gb",
-      "uqmobile-kurikoshi-m-plus5g-17gb"
+      "airalo-usa-unlimited-3d",
+      "airalo-usa-unlimited-5d",
+      "airalo-usa-unlimited-7d",
+      "airalo-usa-unlimited-10d",
+      "airalo-usa-unlimited-15d",
+      "airalo-usa-unlimited-30d",
+      "airalo-usa-unlimited-40d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "5gb-ika-hikaku",
-    "title": "5GB以下の少量プラン徹底比較(IIJmio・ワイモバイル・LINEMO)",
-    "category": "格安SIM",
+    "id": "airalo-korea-duration",
+    "title": "airaloの韓国eSIM、日数別プラン徹底比較(3日〜30日)",
+    "category": "airalo単体比較",
     "plan_ids": [
-      "iijmio-gigaplan-voice-5gb",
-      "ymobile-simple3-s-5gb",
-      "linemo-bestplan-3gb"
+      "airalo-korea-unlimited-3d",
+      "airalo-korea-unlimited-5d",
+      "airalo-korea-unlimited-7d",
+      "airalo-korea-unlimited-10d",
+      "airalo-korea-unlimited-30d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "online-vs-mvno",
-    "title": "オンライン専用ブランドと格安SIM、結局どっちが安い?ahamo・LINEMO・mineo・IIJmio比較",
-    "category": "オンライン専用プラン",
+    "id": "airalo-thailand-duration",
+    "title": "タイ旅行のeSIMプラン徹底比較!airalo 日数別プラン(3日〜30日)",
+    "category": "airalo単体比較",
     "plan_ids": [
-      "ahamo-30gb",
-      "linemo-bestplan-3gb",
-      "mineo-mypita-dual-15gb",
-      "iijmio-gigaplan-voice-5gb"
+      "airalo-thailand-unlimited-3d",
+      "airalo-thailand-unlimited-5d",
+      "airalo-thailand-unlimited-7d",
+      "airalo-thailand-unlimited-10d",
+      "airalo-thailand-unlimited-15d",
+      "airalo-thailand-unlimited-30d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "subbrand-vs-mvno",
-    "title": "サブブランド(UQ mobile・ワイモバイル)は本当にお得?格安SIMと料金比較",
-    "category": "サブブランド",
+    "id": "taiwan-tanki-3sha",
+    "title": "台湾3日間弾丸旅行のeSIM比較!トリファ・airalo・Sailyどれがいい?",
+    "category": "3社比較",
     "plan_ids": [
-      "uqmobile-kurikoshi-m-plus5g-17gb",
-      "ymobile-simple3-s-5gb",
-      "mineo-mypita-dual-15gb",
-      "biglobe-mobile-planm-6gb"
+      "trifa-global-1gb-3d",
+      "airalo-taiwan-unlimited-3d",
+      "saily-taiwan-1gb-7d"
     ],
     "used": false,
     "used_at": null
   },
   {
-    "id": "hitorigurashi-tsushinhi",
-    "title": "一人暮らしの通信費まるごと見直し!スマホ+光回線で年間いくら節約できる?",
-    "category": "通信費まとめて見直し",
+    "id": "airalo-europe-duration",
+    "title": "ヨーロッパ周遊eSIM、airaloの日数別プラン徹底比較(3日〜30日)",
+    "category": "airalo単体比較",
     "plan_ids": [
-      "ahamo-30gb",
-      "nuro-hikari-2giga-3y"
+      "airalo-europe-unlimited-3d",
+      "airalo-europe-unlimited-5d",
+      "airalo-europe-unlimited-7d",
+      "airalo-europe-unlimited-10d",
+      "airalo-europe-unlimited-15d",
+      "airalo-europe-unlimited-30d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "esim-3sha-erabikata",
+    "title": "海外eSIM主要3社(トリファ・airalo・Saily)徹底比較!初めてでも失敗しない選び方",
+    "category": "選び方ガイド",
+    "plan_ids": [
+      "trifa-global-unlimited-7d",
+      "airalo-usa-unlimited-7d",
+      "saily-usa-unlimited-7d"
     ],
     "used": false,
     "used_at": null

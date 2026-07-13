@@ -1,4 +1,4 @@
-"""完全自動投稿ブログ「通信費見直しナビ」 メイン実行スクリプト。
+"""完全自動投稿ブログ「海外SIM・eSIM比較ガイド」 メイン実行スクリプト。
 
 フロー: トピック選択 -> plans.json(キュレーション型プランDB)から該当プラン情報を取得
         -> 独自スコアリング(お得度判定) -> Claude記事生成(アウトライン/本文/タイトル/自己レビュー)
@@ -12,10 +12,15 @@
 
 Dragon(`app/main.py`, 型落ち家電ラボ・楽天API版)/Angel(`angel/app/main.py`, 型落ちガジェット
 比較所・Yahoo API版)とほぼ同一のフロー構成だが、データソースが「商品検索API」ではなく
-ローカルの`plans.json`(キュレーション型DB)である点が最大の違い。通信キャリアの料金プランを
-横断検索できる公開APIが一般的に存在しないための設計(`demon/developer/tasks.md`
-「## データソース設計検討」参照)。API呼び出しが無い分、`plans_client.get_plans_by_ids()` は
-例外(IDの不整合)以外は即座に返り、レートリミット・ネットワークエラーハンドリングは不要。
+ローカルの`plans.json`(キュレーション型DB)である点が最大の違い。海外eSIM各社(トリファ・
+airalo・Saily)を横断検索できる公開APIが一般的に存在しないための設計(`demon/developer/
+tasks.md`「## データソース設計検討」参照)。API呼び出しが無い分、`plans_client.get_plans_by_ids()`
+は例外(IDの不整合)以外は即座に返り、レートリミット・ネットワークエラーハンドリングは不要。
+
+2026-07-13、社長判断で「通信費比較(格安SIM・光回線)」から「海外旅行用eSIM比較」へ全面
+ピボットした(旧版の経緯は`demon/developer/tasks.md`「## データソース設計検討」以下、
+新版の経緯は同ファイル「## 海外eSIM版へ全面リニューアル」参照)。アフィリエイトも
+A8.net(未提携)からバリューコマース(トリファ・airalo・Saily 3社と即時提携済み)に切り替えた。
 
 拡張ポイント(将来対応時にコメントを参照):
 - エラー通知: 現状はログ出力のみ。Discord Webhook等を追加する場合は
@@ -48,6 +53,8 @@ from blog_auto_post.table_builder import (
     build_comparison_table_html,
     build_disclaimer_html,
 )
+
+CATEGORY_ESIM = "海外eSIM比較"
 
 JST = timezone(timedelta(hours=9))
 
@@ -83,12 +90,14 @@ def main() -> int:
         plans = get_plans_by_ids(topic["plan_ids"])
         if not plans:
             raise PlanRepositoryError("プランデータが1件も取得できませんでした")
-        # A8.net提携後、アフィリエイトURLへ変換(未提携の間はsource_urlのまま)
+        # バリューコマース(トリファ・airalo・Saily 3社と即時提携済み)のreferralリンクへ変換
         for p in plans:
             p["affiliate_url"] = to_affiliate_url(
-                p.get("source_url", ""), affiliate_id=settings.a8_affiliate_id
+                p.get("service_name", ""), raw_url=p.get("official_url", "")
             )
-        plan_labels = [f"{p['provider']}「{p['plan_name']}」" for p in plans]
+        plan_labels = [
+            f"{p['service_name']}「{p['destination']} {p['days']}日間」" for p in plans
+        ]
         print(f"[main] plans.jsonからプラン {len(plans)} 件取得: {plan_labels}")
     except Exception as e:  # PlanRepositoryError含む予期せぬ例外も安全に捕捉する
         notify_failure("plans_fetch", e)
@@ -134,7 +143,7 @@ def main() -> int:
         print(f"[main] 投稿予定メタディスクリプション: {draft.meta_description!r}")
         print(f"[main] 投稿予定本文冒頭(300文字): {final_html[:300]!r}")
         print(f"[main] 投稿予定URL(推定・実際の値は投稿後に確定): {dry_run_url}")
-        print(f"[main] 投稿予定カテゴリ: {[topic['category'], '通信費比較']}")
+        print(f"[main] 投稿予定カテゴリ: {[topic['category'], CATEGORY_ESIM]}")
         print(f"[main] 比較表HTML(検証用、先頭800文字): {table_html[:800]!r}")
         print(f"[main] 免責文言HTML(検証用): {disclaimer_html!r}")
     else:
@@ -145,7 +154,7 @@ def main() -> int:
                 api_key=settings.hatena_api_key,
                 title=draft.title,
                 content_html=final_html,
-                categories=[topic["category"], "通信費比較"],
+                categories=[topic["category"], CATEGORY_ESIM],
                 draft=False,  # 社長方針: 最初から完全自動公開
             )
             print(f"[main] はてなブログ投稿成功: {result.get('location')}")

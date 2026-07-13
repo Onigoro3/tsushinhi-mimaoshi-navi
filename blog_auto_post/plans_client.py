@@ -1,20 +1,27 @@
-"""ローカルの `data/plans.json`(通信プラン キュレーション型DB)からプラン情報を取得する。
+"""ローカルの `data/plans.json`(海外eSIM プラン キュレーション型DB)からプラン情報を取得する。
 
 Dragon(`rakuten_client.py`)/Angel(`yahoo_client.py`)が担っていた「商品検索APIをリアルタイム
 呼び出しする」役割を、Demonでは外部APIではなく**ローカルJSON参照**に置き換えたモジュール。
-通信キャリアの料金プランを横断検索できる公開APIが一般的に存在しないため(developer/tasks.md
-「## データソース設計検討」参照)、hishoが月1回程度の頻度で公式サイトを再訪して更新する
-`plans.json` を、Dragon/Angelにおける「商品検索APIのレスポンス」の代わりとして扱う。
+海外eSIM各社(トリファ・airalo・Saily)を横断検索できる公開APIが一般的に存在しないため
+(developer/tasks.md「## データソース設計検討」参照)、hishoが定期的に各社公式サイトを
+再訪して更新する `plans.json` を、Dragon/Angelにおける「商品検索APIのレスポンス」の代わりと
+して扱う。
 
 記事生成のたびに外部へ問い合わせるわけではなく、既に構造化済みの静的データをそのまま
 読み込むだけであるため、レートリミット・ネットワークエラーハンドリングは不要。
 LLMには本モジュールが返す値をそのまま渡し、価格・データ容量等の数値をLLMに生成させる
 余地を作らない設計を貫く。
 
-`plans.json` は本来 `demon/developer/plans.json` がマスターデータであり、hishoの定期リサーチ
-結果をdeveloperが反映して更新する。本ディレクトリの `data/plans.json` は、Dragon/Angelの
-`data/topics.json` 等と同様に「アプリが実行時に参照するデプロイ用コピー」という位置づけ。
-マスター更新時は developer が `data/plans.json` へ同期する運用とする(README参照)。
+`plans.json` は本来 `demon/developer/esim_plans.json`(秘書調査の生データ)を正規化した
+ものがマスターデータであり、hishoの定期リサーチ結果をdeveloperが反映して更新する。
+本ディレクトリの `data/plans.json` は、Dragon/Angelの `data/topics.json` 等と同様に
+「アプリが実行時に参照するデプロイ用コピー」という位置づけ。マスター更新時は developer が
+`data/plans.json` へ同期する運用とする(README参照)。
+
+`plans.json` の各レコードにはairalo(信頼度high、公式サイト直接取得)・トリファ/Saily
+(信頼度low、二次情報源経由での収集)という `reliability` フィールドがあり、
+`table_builder.py` 側でこの値に応じた注意書きの出し分けに使われる(本モジュールでは
+特別扱いせず、そのままの値を返すのみ)。
 """
 from __future__ import annotations
 

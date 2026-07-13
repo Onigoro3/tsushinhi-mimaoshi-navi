@@ -5,8 +5,12 @@
 
 Dragon(app/blog_auto_post/config.py)・Angel(angel/app/blog_auto_post/config.py)とほぼ
 同一構造だが、データソースAPI(楽天/Yahoo)のクライアントIDが不要な点(plans.jsonをローカル
-参照するだけのため)、アフィリエイトIDがA8.net経由(A8_AFFILIATE_ID、審査通過まで空文字運用)
-である点が異なる。
+参照するだけのため)が異なる。
+
+アフィリエイト(バリューコマース)のsid・pidは`blog_auto_post/affiliate.py`にハードコードして
+いる(トリファ・airalo・Saily 3社と即時提携済みで、pidは秘密情報ではなく固定のreferralリンク
+識別子のため、環境変数化はせず他部署のAPIキー等と区別している)。旧版(通信費比較)で使っていた
+A8_AFFILIATE_ID(未提携プレースホルダー)は本リニューアルで廃止した。
 """
 from __future__ import annotations
 
@@ -36,10 +40,7 @@ class Settings:
     hatena_blog_domain: str
     hatena_api_key: str
 
-    a8_affiliate_id: str  # A8.net提携前は空文字(公式サイトの通常URLのまま運用)
 
-
-# A8_AFFILIATE_ID は空文字運用を許容するため必須変数には含めない(README参照)。
 REQUIRED_ENV_VARS = [
     "ANTHROPIC_API_KEY",
     "HATENA_ID",
@@ -64,5 +65,4 @@ def load_settings() -> Settings:
         hatena_id=os.environ["HATENA_ID"],
         hatena_blog_domain=os.environ["HATENA_BLOG_DOMAIN"],
         hatena_api_key=os.environ["HATENA_API_KEY"],
-        a8_affiliate_id=os.environ.get("A8_AFFILIATE_ID", ""),
     )
