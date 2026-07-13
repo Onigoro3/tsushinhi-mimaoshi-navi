@@ -20,8 +20,9 @@
       "airalo-europe-unlimited-30d",
       "saily-europe-10gb-30d"
     ],
-    "used": false,
-    "used_at": null
+    "used": true,
+    "used_at": "2026-07-13T04:01:49+00:00",
+    "use_count": 1
   },
   {
     "id": "korea-tanki-3sha",
