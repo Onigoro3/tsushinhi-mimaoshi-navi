@@ -128,17 +128,20 @@ def main() -> int:
     final_html += disclaimer_html
 
     # 6. はてなブログへ投稿(完全自動公開) -----------------------------------
-    # 環境変数 DEMON_DRY_RUN=true (または 1/yes) が設定されている場合のみ、実際の投稿を
-    # 行わず投稿予定内容を標準出力に表示するだけに留める(2026-07-13 実機検証時に導入。
-    # Angelの `ANGEL_DRY_RUN` と同一設計)。未設定(デフォルト)の場合は通常通り
-    # post_entry() を実行して本番公開する。
+    # 環境変数 DEMON_DRY_RUN=true (または 1/yes) が設定されている場合のみ、実際の投稿・
+    # topics.jsonへの書き込みの両方を行わず、投稿予定内容を標準出力に表示するだけに
+    # 留める(2026-07-13 実機検証時に導入。Angelの `ANGEL_DRY_RUN` と同一設計。
+    # 2026-07-15修正: 従来はpost_entry()のみスキップしtopics.mark_used()は無条件実行
+    # されていたため、ドライラン実行のたびに本番の使用済みトピックが意図せず書き換わって
+    # しまう問題があった。dry_run時は保存処理ごとスキップするよう修正)。
+    # 未設定(デフォルト)の場合は通常通りpost_entry()・保存を実行して本番公開する。
     dry_run = os.environ.get("DEMON_DRY_RUN", "").strip().lower() in ("1", "true", "yes")
     if dry_run:
         dry_run_url = (
             f"https://{settings.hatena_blog_domain}/entry/"
             f"{datetime.now(JST).strftime('%Y/%m/%d/%H%M%S')}"
         )
-        print("[main] === DEMON_DRY_RUN=true: post_entry() は実行していません(実際には投稿されません) ===")
+        print("[main] === DEMON_DRY_RUN=true: post_entry()・データ保存は実行していません(本番未反映) ===")
         print(f"[main] 投稿予定タイトル: {draft.title!r}")
         print(f"[main] 投稿予定メタディスクリプション: {draft.meta_description!r}")
         print(f"[main] 投稿予定本文冒頭(300文字): {final_html[:300]!r}")
@@ -146,21 +149,22 @@ def main() -> int:
         print(f"[main] 投稿予定カテゴリ: {[topic['category'], CATEGORY_ESIM]}")
         print(f"[main] 比較表HTML(検証用、先頭800文字): {table_html[:800]!r}")
         print(f"[main] 免責文言HTML(検証用): {disclaimer_html!r}")
-    else:
-        try:
-            result = post_entry(
-                hatena_id=settings.hatena_id,
-                blog_domain=settings.hatena_blog_domain,
-                api_key=settings.hatena_api_key,
-                title=draft.title,
-                content_html=final_html,
-                categories=[topic["category"], CATEGORY_ESIM],
-                draft=False,  # 社長方針: 最初から完全自動公開
-            )
-            print(f"[main] はてなブログ投稿成功: {result.get('location')}")
-        except Exception as e:  # HatenaAPIError含む予期せぬ例外も安全に捕捉する
-            notify_failure("hatena_post", e)
-            return 1
+        return 0
+
+    try:
+        result = post_entry(
+            hatena_id=settings.hatena_id,
+            blog_domain=settings.hatena_blog_domain,
+            api_key=settings.hatena_api_key,
+            title=draft.title,
+            content_html=final_html,
+            categories=[topic["category"], CATEGORY_ESIM],
+            draft=False,  # 社長方針: 最初から完全自動公開
+        )
+        print(f"[main] はてなブログ投稿成功: {result.get('location')}")
+    except Exception as e:  # HatenaAPIError含む予期せぬ例外も安全に捕捉する
+        notify_failure("hatena_post", e)
+        return 1
 
     # 7. トピック使用済みマークの保存 ---------------------------------------
     # (Demonはplans.jsonがAPIではなく静的データのため、Dragon/Angelのような

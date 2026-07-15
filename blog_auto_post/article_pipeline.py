@@ -330,8 +330,13 @@ META: (110〜120文字程度のメタディスクリプション)
 
         outline = self.generate_outline(topic_title, category, plans_text)
         body = self.generate_body(topic_title, category, plans_text, outline)
-        title, meta = self.generate_title_and_meta(topic_title, body)
         final_body, review_notes = self.self_review(topic_title, plans_text, body)
+        # タイトルは自己レビュー後の最終本文を見て決定する(2026-07-15修正: 従来は
+        # レビュー前のbodyでタイトルを決めていたため、自己レビューが本文中の誇大表現・
+        # データ不整合を修正しても、既に確定したタイトルには反映されず、タイトルと
+        # 本文の内容が食い違う実例をドライラン検証(Angelの実際のClaude API呼び出し)
+        # で確認したため、呼び出し順序を入れ替えた(3部署共通のロジック修正))
+        title, meta = self.generate_title_and_meta(topic_title, final_body)
 
         return ArticleDraft(
             outline=outline,
