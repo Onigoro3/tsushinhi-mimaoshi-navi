@@ -16,7 +16,6 @@ Dragon(`app/blog_auto_post/topics.py`)・Angel(`angel/app/blog_auto_post/topics.
 from __future__ import annotations
 
 import json
-import random
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -49,7 +48,10 @@ def save_topics(topics: list[dict[str, Any]], path: Path = DEFAULT_TOPICS_PATH) 
 
 
 def pick_topic(path: Path = DEFAULT_TOPICS_PATH) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """未使用トピックをランダムに1件選ぶ。全件使用済みなら全件リセットしてから選ぶ。
+    """未使用トピックをキュー順(配列の先頭)で1件選ぶ。全件使用済みなら全件リセットしてから選ぶ。
+
+    編集会議がトピックを配列の先頭へ移動させることで次回投稿を制御できるよう、
+    ランダム選択ではなく配列順を尊重する(旧: random.choice(unused))。
 
     Returns: (選ばれたトピック, 全トピックリスト(まだ使用済みマーク前))
     """
@@ -63,7 +65,7 @@ def pick_topic(path: Path = DEFAULT_TOPICS_PATH) -> tuple[dict[str, Any], list[d
             t["used_at"] = None
         unused = topics
 
-    chosen = random.choice(unused)
+    chosen = unused[0]
     return chosen, topics
 
 

@@ -1,5 +1,17 @@
 [
   {
+    "id": "korea-tanki-3sha",
+    "title": "韓国弾丸旅行(3〜7日)のeSIM比較!トリファ・airalo・Sailyで一番お得なのは?",
+    "category": "3社比較",
+    "plan_ids": [
+      "trifa-global-1gb-3d",
+      "airalo-korea-unlimited-3d",
+      "saily-korea-1gb-7d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
     "id": "usa-7days-3sha",
     "title": "アメリカ 7日間 eSIM徹底比較!トリファ・airalo・Saily どれがお得?",
     "category": "3社比較",
@@ -8,8 +20,9 @@
       "airalo-usa-unlimited-7d",
       "saily-usa-unlimited-7d"
     ],
-    "used": false,
-    "used_at": null
+    "used": true,
+    "used_at": "2026-07-14T04:52:25+00:00",
+    "use_count": 1
   },
   {
     "id": "europe-30days-3sha",
@@ -23,18 +36,6 @@
     "used": true,
     "used_at": "2026-07-13T04:01:49+00:00",
     "use_count": 1
-  },
-  {
-    "id": "korea-tanki-3sha",
-    "title": "韓国弾丸旅行(3〜7日)のeSIM比較!トリファ・airalo・Sailyで一番お得なのは?",
-    "category": "3社比較",
-    "plan_ids": [
-      "trifa-global-1gb-3d",
-      "airalo-korea-unlimited-3d",
-      "saily-korea-1gb-7d"
-    ],
-    "used": false,
-    "used_at": null
   },
   {
     "id": "taiwan-30days-3sha",
