@@ -1,5 +1,17 @@
 [
   {
+    "id": "esim-3sha-erabikata",
+    "title": "海外eSIM主要3社(トリファ・airalo・Saily)徹底比較!初めてでも失敗しない選び方",
+    "category": "選び方ガイド",
+    "plan_ids": [
+      "trifa-global-unlimited-7d",
+      "airalo-usa-unlimited-7d",
+      "saily-usa-unlimited-7d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
     "id": "airalo-thailand-duration",
     "title": "タイ旅行のeSIMプラン徹底比較!airalo 日数別プラン(3日〜30日)",
     "category": "airalo単体比較",
@@ -120,18 +132,6 @@
       "airalo-europe-unlimited-10d",
       "airalo-europe-unlimited-15d",
       "airalo-europe-unlimited-30d"
-    ],
-    "used": false,
-    "used_at": null
-  },
-  {
-    "id": "esim-3sha-erabikata",
-    "title": "海外eSIM主要3社(トリファ・airalo・Saily)徹底比較!初めてでも失敗しない選び方",
-    "category": "選び方ガイド",
-    "plan_ids": [
-      "trifa-global-unlimited-7d",
-      "airalo-usa-unlimited-7d",
-      "saily-usa-unlimited-7d"
     ],
     "used": false,
     "used_at": null
