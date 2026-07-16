@@ -12,6 +12,87 @@
     "used_at": null
   },
   {
+    "id": "airalo-usa-duration",
+    "title": "airaloのアメリカeSIM、日数別プラン徹底比較(3日〜40日)",
+    "category": "airalo単体比較",
+    "plan_ids": [
+      "airalo-usa-unlimited-3d",
+      "airalo-usa-unlimited-5d",
+      "airalo-usa-unlimited-7d",
+      "airalo-usa-unlimited-10d",
+      "airalo-usa-unlimited-15d",
+      "airalo-usa-unlimited-30d",
+      "airalo-usa-unlimited-40d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "airalo-europe-duration",
+    "title": "ヨーロッパ周遊eSIM、airaloの日数別プラン徹底比較(3日〜30日)",
+    "category": "airalo単体比較",
+    "plan_ids": [
+      "airalo-europe-unlimited-3d",
+      "airalo-europe-unlimited-5d",
+      "airalo-europe-unlimited-7d",
+      "airalo-europe-unlimited-10d",
+      "airalo-europe-unlimited-15d",
+      "airalo-europe-unlimited-30d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "hawaii-summer-3sha",
+    "title": "ハワイ旅行(夏7日間)のeSIM比較!トリファ・airalo・Sailyどれがお得?",
+    "category": "3社比較",
+    "plan_ids": [
+      "trifa-global-unlimited-7d",
+      "airalo-usa-unlimited-7d",
+      "saily-usa-unlimited-7d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "esim-light-user-1gb-3gb",
+    "title": "データ軽めの海外eSIM比較!地図とLINEだけなら1〜3GBで足りる?",
+    "category": "旅行スタイル別",
+    "plan_ids": [
+      "trifa-global-1gb-3d",
+      "saily-usa-1gb-7d",
+      "airalo-usa-unlimited-3d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "airalo-korea-duration",
+    "title": "airaloの韓国eSIM、日数別プラン徹底比較(3日〜30日)",
+    "category": "airalo単体比較",
+    "plan_ids": [
+      "airalo-korea-unlimited-3d",
+      "airalo-korea-unlimited-5d",
+      "airalo-korea-unlimited-7d",
+      "airalo-korea-unlimited-10d",
+      "airalo-korea-unlimited-30d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
+    "id": "taiwan-tanki-3sha",
+    "title": "台湾3日間弾丸旅行のeSIM比較!トリファ・airalo・Sailyどれがいい?",
+    "category": "3社比較",
+    "plan_ids": [
+      "trifa-global-1gb-3d",
+      "airalo-taiwan-unlimited-3d",
+      "saily-taiwan-1gb-7d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
     "id": "airalo-thailand-duration",
     "title": "タイ旅行のeSIMプラン徹底比較!airalo 日数別プラン(3日〜30日)",
     "category": "airalo単体比較",
@@ -78,62 +159,5 @@
     "used": true,
     "used_at": "2026-07-16T01:27:40+00:00",
     "use_count": 1
-  },
-  {
-    "id": "airalo-usa-duration",
-    "title": "airaloのアメリカeSIM、日数別プラン徹底比較(3日〜40日)",
-    "category": "airalo単体比較",
-    "plan_ids": [
-      "airalo-usa-unlimited-3d",
-      "airalo-usa-unlimited-5d",
-      "airalo-usa-unlimited-7d",
-      "airalo-usa-unlimited-10d",
-      "airalo-usa-unlimited-15d",
-      "airalo-usa-unlimited-30d",
-      "airalo-usa-unlimited-40d"
-    ],
-    "used": false,
-    "used_at": null
-  },
-  {
-    "id": "airalo-korea-duration",
-    "title": "airaloの韓国eSIM、日数別プラン徹底比較(3日〜30日)",
-    "category": "airalo単体比較",
-    "plan_ids": [
-      "airalo-korea-unlimited-3d",
-      "airalo-korea-unlimited-5d",
-      "airalo-korea-unlimited-7d",
-      "airalo-korea-unlimited-10d",
-      "airalo-korea-unlimited-30d"
-    ],
-    "used": false,
-    "used_at": null
-  },
-  {
-    "id": "taiwan-tanki-3sha",
-    "title": "台湾3日間弾丸旅行のeSIM比較!トリファ・airalo・Sailyどれがいい?",
-    "category": "3社比較",
-    "plan_ids": [
-      "trifa-global-1gb-3d",
-      "airalo-taiwan-unlimited-3d",
-      "saily-taiwan-1gb-7d"
-    ],
-    "used": false,
-    "used_at": null
-  },
-  {
-    "id": "airalo-europe-duration",
-    "title": "ヨーロッパ周遊eSIM、airaloの日数別プラン徹底比較(3日〜30日)",
-    "category": "airalo単体比較",
-    "plan_ids": [
-      "airalo-europe-unlimited-3d",
-      "airalo-europe-unlimited-5d",
-      "airalo-europe-unlimited-7d",
-      "airalo-europe-unlimited-10d",
-      "airalo-europe-unlimited-15d",
-      "airalo-europe-unlimited-30d"
-    ],
-    "used": false,
-    "used_at": null
   }
 ]
