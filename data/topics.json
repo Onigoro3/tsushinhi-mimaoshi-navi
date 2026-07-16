@@ -1,5 +1,20 @@
 [
   {
+    "id": "airalo-thailand-duration",
+    "title": "タイ旅行のeSIMプラン徹底比較!airalo 日数別プラン(3日〜30日)",
+    "category": "airalo単体比較",
+    "plan_ids": [
+      "airalo-thailand-unlimited-3d",
+      "airalo-thailand-unlimited-5d",
+      "airalo-thailand-unlimited-7d",
+      "airalo-thailand-unlimited-10d",
+      "airalo-thailand-unlimited-15d",
+      "airalo-thailand-unlimited-30d"
+    ],
+    "used": false,
+    "used_at": null
+  },
+  {
     "id": "korea-tanki-3sha",
     "title": "韓国弾丸旅行(3〜7日)のeSIM比較!トリファ・airalo・Sailyで一番お得なのは?",
     "category": "3社比較",
@@ -77,21 +92,6 @@
       "airalo-korea-unlimited-7d",
       "airalo-korea-unlimited-10d",
       "airalo-korea-unlimited-30d"
-    ],
-    "used": false,
-    "used_at": null
-  },
-  {
-    "id": "airalo-thailand-duration",
-    "title": "タイ旅行のeSIMプラン徹底比較!airalo 日数別プラン(3日〜30日)",
-    "category": "airalo単体比較",
-    "plan_ids": [
-      "airalo-thailand-unlimited-3d",
-      "airalo-thailand-unlimited-5d",
-      "airalo-thailand-unlimited-7d",
-      "airalo-thailand-unlimited-10d",
-      "airalo-thailand-unlimited-15d",
-      "airalo-thailand-unlimited-30d"
     ],
     "used": false,
     "used_at": null
