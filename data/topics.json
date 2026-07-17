@@ -8,8 +8,9 @@
       "airalo-usa-unlimited-7d",
       "saily-usa-unlimited-7d"
     ],
-    "used": false,
-    "used_at": null
+    "used": true,
+    "used_at": "2026-07-17T02:25:38+00:00",
+    "use_count": 1
   },
   {
     "id": "airalo-usa-duration",
