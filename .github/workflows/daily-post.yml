@@ -14,7 +14,8 @@ on:
   workflow_dispatch: {}  # 手動実行・動作確認用
 
 permissions:
-  contents: write  # トピック使用済みマークをリポジトリへコミットするため
+  contents: read  # 2026-07-17: トピックの永続化先をSupabaseへ移行したため、
+                  # git commit権限は不要になった(sa_common/supabase_store.py参照)
 
 jobs:
   post:
@@ -38,6 +39,8 @@ jobs:
           HATENA_ID: ${{ secrets.HATENA_ID }}
           HATENA_BLOG_DOMAIN: ${{ secrets.HATENA_BLOG_DOMAIN }}
           HATENA_API_KEY: ${{ secrets.HATENA_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: python main.py
 
       # 実行失敗時の通知拡張ポイント:
@@ -50,12 +53,3 @@ jobs:
       #     curl -H "Content-Type: application/json" \
       #       -d '{"content":"Demon Daily Auto Post が失敗しました。Actionsログを確認してください。"}' \
       #       ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-      - name: Commit updated topic queue
-        if: success()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/topics.json
-          git diff --cached --quiet || git commit -m "chore: update topic queue [skip ci]"
-          git push
