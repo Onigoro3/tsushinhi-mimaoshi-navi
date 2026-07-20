@@ -83,13 +83,20 @@ def build_comparison_table_html(plans: list[dict[str, Any]]) -> str:
         )
 
     table_html = (
-        '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;">'
+        # 【2026-07-20修正】スマホ幅で全列が無理やり圧縮され、セルが1文字ずつ改行される
+        # 問題が実機で見つかった。横スクロール可能なdivで囲み、tableにmin-widthを設定
+        # することで、狭い画面では列を圧縮する代わりに横スクロールさせる(Dragon/Angel/
+        # hotel_naviと共通の修正)。8列と他より多いため、min-widthも大きめに設定。
+        '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
+        '<table border="1" cellspacing="0" cellpadding="6" '
+        'style="border-collapse:collapse;width:100%;min-width:760px;">'
         "<thead><tr>"
         "<th>サービス/渡航先</th><th>利用可能日数</th><th>データ容量</th><th>価格</th>"
         "<th>円/日</th><th>円/GB</th><th>お得度スコア</th><th>公式サイト</th>"
         "</tr></thead>"
         f"<tbody>{''.join(rows)}</tbody>"
         "</table>"
+        "</div>"
     )
 
     if has_low_reliability:
