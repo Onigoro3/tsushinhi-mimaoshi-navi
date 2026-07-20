@@ -40,6 +40,12 @@ class Settings:
     hatena_blog_domain: str
     hatena_api_key: str
 
+    # Pexels APIキー(アイキャッチ・渡航先テーマ画像の実写取得用、2026-07-20追加)。
+    # 【任意項目】未設定でも記事生成自体は継続し、単に画像挿入だけをスキップする設計
+    # (必須環境変数に加えると、Pexels側の障害・キー失効だけで記事生成全体が止まって
+    # しまうため、REQUIRED_ENV_VARSには含めない。last_minute_hotel_navi/config.pyと同じ設計)。
+    pexels_api_key: str
+
 
 REQUIRED_ENV_VARS = [
     "ANTHROPIC_API_KEY",
@@ -65,4 +71,5 @@ def load_settings() -> Settings:
         hatena_id=os.environ["HATENA_ID"],
         hatena_blog_domain=os.environ["HATENA_BLOG_DOMAIN"],
         hatena_api_key=os.environ["HATENA_API_KEY"],
+        pexels_api_key=os.environ.get("PEXELS_API_KEY", ""),
     )

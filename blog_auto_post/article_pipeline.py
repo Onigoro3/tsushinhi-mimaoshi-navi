@@ -18,6 +18,7 @@ Dragon(`app/blog_auto_post/article_pipeline.py`)・Angel(`angel/app/blog_auto_po
 """
 from __future__ import annotations
 
+import re
 import sys
 from dataclasses import dataclass
 from typing import Any
@@ -30,6 +31,7 @@ MAX_TOKENS_OUTLINE = 1536
 MAX_TOKENS_BODY = 8192
 MAX_TOKENS_TITLE = 512
 MAX_TOKENS_REVIEW = 8192
+MAX_TOKENS_TRANSLATE = 256
 
 FINAL_BODY_MARKER = "### FINAL_BODY"
 
@@ -323,6 +325,63 @@ META: (110〜120文字程度のメタディスクリプション)
             final_body = final_body + f"\n{PLAN_TABLE_PLACEHOLDER}\n"
 
         return final_body, notes
+
+    # ------------------------------------------------------------------
+    # 渡航先テーマ画像(Pexels)検索クエリの英語変換
+    # ------------------------------------------------------------------
+    def translate_destination_queries(self, destinations: list[str]) -> list[str]:
+        """渡航先名(日本語、重複除く・最大2件を想定)を、Pexels検索用の英語クエリへ
+        最大2つ変換する。
+
+        2026-07-20実機確認(last_minute_hotel_navi/article_pipeline.py.translate_spot_names()と
+        同じ教訓): Pexelsは日本語クエリのままだと無関係な画像がヒットしやすい
+        (「新宿御苑」検索が無関係なケーキ写真を返した実例あり)一方、英語の正式名称
+        ("Taiwan"等)ではほぼ正確にヒットする。
+
+        渡航先が1件しかない場合でも、記事に2枚の異なる写真を挿入できるよう、その国・地域を
+        象徴する異なる被写体(都市風景/ランドマーク/食文化等)の英語クエリを2つ生成させる。
+        渡航先が2件ある場合は、それぞれ1つずつのクエリを返す。
+        「グローバル共通」のような特定の地域を指さない値は呼び出し側でフィルタしてから
+        渡すこと(本メソッドでは行わない)。
+        """
+        if not destinations:
+            return []
+
+        system = (
+            "あなたは海外旅行系メディアの写真選定担当です。渡航先に関連する実写を"
+            "ストックフォト検索サービスで探す際、最もヒットしやすい英語の検索クエリを"
+            "考える専門家です。"
+        )
+        dest_list = "\n".join(f"- {d}" for d in destinations)
+        user = f"""以下は海外SIM・eSIM比較記事に関連する渡航先です。
+
+{dest_list}
+
+この記事に挿入する実写(ストックフォト)を検索するための英語クエリを、最大2つ考えて
+ください。各クエリは異なる被写体(例: 都市の風景、ランドマーク、食文化、街並みなど)を
+表すようにし、Pexelsのようなストックフォトサービスでヒットしやすい一般的な英語表現に
+してください(渡航先が1つしかない場合も、必ず異なる視点の2つのクエリを作ること)。
+
+出力形式は厳密に1行1クエリ・最大2行のみ(他の説明文は一切出力しないこと):
+(英語クエリ1)
+(英語クエリ2)
+"""
+        try:
+            raw = self._call(system, user, MAX_TOKENS_TRANSLATE)
+        except Exception:
+            # 翻訳に失敗しても記事生成全体は止めない(呼び出し側で画像挿入自体を
+            # スキップするだけで継続できる)
+            return []
+
+        queries: list[str] = []
+        for line in raw.splitlines():
+            line = line.strip().strip("`").strip('"').strip()
+            line = re.sub(r"^[-\d.、\s]+", "", line).strip()
+            if line:
+                queries.append(line)
+            if len(queries) >= 2:
+                break
+        return queries
 
     # ------------------------------------------------------------------
     def run(self, topic_title: str, category: str, plans: list[dict[str, Any]]) -> ArticleDraft:

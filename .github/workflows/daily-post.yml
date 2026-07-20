@@ -41,6 +41,7 @@ jobs:
           HATENA_API_KEY: ${{ secrets.HATENA_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python main.py
 
       # 実行失敗時の通知拡張ポイント:

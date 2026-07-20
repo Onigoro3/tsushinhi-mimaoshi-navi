@@ -41,11 +41,12 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-from blog_auto_post import topics
+from blog_auto_post import pexels_client, topics
 from blog_auto_post.affiliate import to_affiliate_url
 from blog_auto_post.article_pipeline import ArticlePipeline
 from blog_auto_post.config import ConfigError, load_settings
 from blog_auto_post.hatena_client import HatenaAPIError, post_entry
+from blog_auto_post.image_enrichment import insert_eyecatch, insert_theme_image_before_first_h2
 from blog_auto_post.plans_client import PlanRepositoryError, get_plans_by_ids
 from blog_auto_post.scoring import compute_scores
 from blog_auto_post.table_builder import (
@@ -55,6 +56,9 @@ from blog_auto_post.table_builder import (
 )
 
 CATEGORY_ESIM = "海外eSIM比較"
+
+# Pexels検索の対象から除外する渡航先(特定の国・地域を指さない値)
+_GENERIC_DESTINATION_LABELS = {"グローバル共通"}
 
 JST = timezone(timedelta(hours=9))
 
@@ -149,18 +153,56 @@ def main() -> int:
         notify_failure("article_generation", e)
         return 1
 
-    # 5. 比較表・免責文言の組み込み ------------------------------------------
+    # 5. 画像挿入(渡航先アイキャッチ+テーマ画像、2026-07-20追加) --------------------
+    # last_minute_hotel_navi/main.py(Dragonリポジトリ)と同じ設計をDemonへ横展開。
+    # ただしDemonのplans.jsonは商品写真を一切持たない静的データのため、Dragon/Angelのように
+    # 「既に取得済みの無料画像」は使えない。代わりに渡航先(destination)をPexelsで検索する
+    # (hotel_naviの観光名所検索と同じ「地名で検索すればよい」パターン、image_enrichment.py参照)。
+    # PEXELS_API_KEY未設定・API障害・翻訳失敗時は例外を出さず本文をそのまま返す設計のため、
+    # ここで個別にtry/exceptする必要はない。
+    body_with_images = draft.body_html
+    if settings.pexels_api_key:
+        unique_destinations: list[str] = []
+        for p in plans:
+            dest = (p.get("destination") or "").strip()
+            if dest and dest not in _GENERIC_DESTINATION_LABELS and dest not in unique_destinations:
+                unique_destinations.append(dest)
+            if len(unique_destinations) >= 2:
+                break
+
+        dest_queries = (
+            pipeline.translate_destination_queries(unique_destinations)
+            if unique_destinations
+            else []
+        )
+        photos = [
+            pexels_client.search_photo(q, settings.pexels_api_key) for q in dest_queries
+        ]
+        photos = [p for p in photos if p is not None]
+
+        eyecatch_photo = photos[0] if len(photos) >= 1 else None
+        theme_photo = photos[1] if len(photos) >= 2 else eyecatch_photo
+
+        alt_text = unique_destinations[0] if unique_destinations else topic["title"]
+        body_with_images = insert_theme_image_before_first_h2(
+            body_with_images, theme_photo, alt_text
+        )
+        # アイキャッチは本文の一番先頭に挿入する(hotel_naviと同じ順序: テーマ画像挿入後に
+        # 先頭へ追加。挿入対象が異なる位置のため、どちらを先に行っても結果は変わらない)。
+        body_with_images = insert_eyecatch(body_with_images, eyecatch_photo, alt_text)
+
+    # 6. 比較表・免責文言の組み込み ------------------------------------------
     table_html = build_comparison_table_html(plans)
     disclaimer_html = build_disclaimer_html(plans)
 
-    final_html = draft.body_html.replace(PLAN_TABLE_PLACEHOLDER, table_html)
+    final_html = body_with_images.replace(PLAN_TABLE_PLACEHOLDER, table_html)
     if draft.meta_description:
         final_html = (
             f'<p style="display:none">{draft.meta_description}</p>\n' + final_html
         )
     final_html += disclaimer_html
 
-    # 6. はてなブログへ投稿(完全自動公開) -----------------------------------
+    # 7. はてなブログへ投稿(完全自動公開) -----------------------------------
     # 環境変数 DEMON_DRY_RUN=true (または 1/yes) が設定されている場合のみ、実際の投稿・
     # topics.jsonへの書き込みの両方を行わず、投稿予定内容を標準出力に表示するだけに
     # 留める(2026-07-13 実機検証時に導入。Angelの `ANGEL_DRY_RUN` と同一設計。
@@ -199,7 +241,7 @@ def main() -> int:
         notify_failure("hatena_post", e)
         return 1
 
-    # 7. トピック使用済みマークの保存 ---------------------------------------
+    # 8. トピック使用済みマークの保存 ---------------------------------------
     # (Demonはplans.jsonがAPIではなく静的データのため、Dragon/Angelのような
     #  price_history.py に相当する「毎回のAPIレスポンスの価格スナップショット蓄積」は
     #  行わない。plans.jsonの更新自体はhishoの月次リサーチにより別途行われる。)
