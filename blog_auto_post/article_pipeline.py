@@ -384,6 +384,117 @@ META: (110〜120文字程度のメタディスクリプション)
         return queries
 
     # ------------------------------------------------------------------
+    # 非比較型(ガイド記事)生成 — 2026-07-22社長判断: Demonのインデックス率10%問題
+    # (3社比較テンプレの重複性が濃厚な原因)への対応として、3社比較テンプレへの
+    # 依存を断つ第二テンプレを追加。plans.json(価格・データ容量等の実データ)を
+    # 使わず、開通手順・端末対応・トラブル対処等、一般的な技術知識の範囲で答えられる
+    # 内容に限定することで、特定の価格・数値をLLMに創作させるリスクなしに比較表
+    # 抜きの記事を成立させる(run()と同じ4段階構成だが比較表データを持たない)。
+    # ------------------------------------------------------------------
+    def generate_outline_guide(self, topic_title: str, category: str) -> str:
+        system = (
+            "あなたは海外eSIM比較サイト「海外SIM・eSIM比較ガイド」の専門編集者です。"
+            "今回は特定サービスの価格比較ではなく、読者が海外eSIMを使いこなす上で"
+            "つまずきやすい実務(購入・設定・トラブル対処・端末対応確認等)を"
+            "分かりやすく解説する記事のアウトラインを作ります。"
+        )
+        user = f"""以下のトピックについて、記事の見出し構成(アウトライン)をMarkdownの
+見出しリスト形式で出力してください。各見出しに1〜2行で要点も添えてください。
+
+トピック: {topic_title}
+カテゴリ: {category}
+
+出力要件:
+- 見出しは## から始めるMarkdown形式のみ
+- 特定サービス(トリファ・airalo・Saily等)の価格・データ容量等の具体的な数値には
+  一切触れない(この記事は価格比較記事ではないため)
+- 一般的な技術知識(eSIMの仕組み、QRコードでのアクティベート方法、対応端末の確認方法、
+  よくあるトラブルとその対処法等)の範囲に限定した見出しにする
+- 見出しは6〜8個程度(本文を2500字以上に伸ばせるボリューム感にする)
+"""
+        return self._call(system, user, MAX_TOKENS_OUTLINE)
+
+    def generate_body_guide(self, topic_title: str, category: str, outline: str) -> str:
+        system = (
+            "あなたは海外旅行が好きで、渡航のたびに現地の通信手段(eSIM各社)を実際に"
+            "使い分けてきた実体験を持つ、「海外SIM・eSIM比較ガイド」の専門ライターです。"
+            "無機質でテンプレ的な『AIが書いたような』文章ではなく、旅行者目線の具体的な"
+            "言葉づかいで、血の通った読み物として仕上げてください。"
+            "この記事は特定サービスの価格比較記事ではないため、価格・データ容量等の"
+            "具体的な数値は一切創作しないこと(一般的な仕組み・手順の解説に徹する)。"
+            "特定の通信会社名を出す場合も、断定的な仕様(対応周波数帯の詳細等)を"
+            "創作せず、「事前に公式サイトで確認してください」という注意喚起を添える。"
+        )
+        user = f"""以下のアウトラインに沿って、記事本文をHTML形式で執筆してください。
+
+トピック: {topic_title}
+カテゴリ: {category}
+
+アウトライン:
+{outline}
+
+出力要件(文体・トーン):
+- 「〜です・ます」調をベースに、読者に語りかける表現を混ぜる
+- 各セクションの結論だけでなく「なぜそう言えるのか」という理由付けを加える
+- 見出しごとに最低150〜250字程度の説明量を確保する
+
+出力要件(技術仕様):
+- HTMLタグ(<h2>, <h3>, <p>, <ul><li>, <strong>等)を使い、はてなブログにそのまま
+  貼り付けられる形式にする。<html>や<body>等の外枠タグは不要
+- 価格・データ容量等の具体的な数値は一切書かない(比較表を伴わない記事のため)
+- 文字数目安は本文全体で2500〜3500字程度。末尾にQ&A形式のセクション(3問程度)を含める
+"""
+        return self._call(system, user, MAX_TOKENS_BODY)
+
+    def self_review_guide(self, topic_title: str, body_html: str) -> tuple[str, str]:
+        system = (
+            "あなたは編集責任者として、公開前の記事をレビューする校閲者です。"
+            "この記事は価格比較記事ではないため、特に「特定サービスの価格・データ容量・"
+            "対応周波数帯等、検証していない具体的数値を書いていないか」を最優先で"
+            "チェックしてください。"
+        )
+        user = f"""トピック: {topic_title}
+
+レビュー対象の記事本文(HTML):
+{body_html}
+
+上記の観点でレビューし、必要なら本文を改善した上で、以下の形式で厳密に出力してください
+(他の文言を前後に含めないこと)。問題がなければ本文をそのまま
+「{FINAL_BODY_MARKER}」以降にコピーしてください。
+
+### REVIEW_NOTES
+(チェック結果を2〜4行程度の箇条書きで。指摘がなければ「問題なし」とだけ書く)
+
+{FINAL_BODY_MARKER}
+(最終版の本文HTML)
+"""
+        raw = self._call(system, user, MAX_TOKENS_REVIEW)
+
+        if FINAL_BODY_MARKER in raw:
+            notes_part, body_part = raw.split(FINAL_BODY_MARKER, 1)
+            notes = notes_part.replace("### REVIEW_NOTES", "").strip()
+            final_body = body_part.strip()
+        else:
+            notes = "(レビュー出力のパースに失敗したため、レビュー前の本文をそのまま採用)"
+            final_body = body_html
+
+        return final_body, notes
+
+    def run_guide(self, topic_title: str, category: str) -> ArticleDraft:
+        outline = self.generate_outline_guide(topic_title, category)
+        body = self.generate_body_guide(topic_title, category, outline)
+        final_body, review_notes = self.self_review_guide(topic_title, body)
+        title, meta = self.generate_title_and_meta(topic_title, final_body)
+
+        return ArticleDraft(
+            outline=outline,
+            body_html=final_body,
+            title=title,
+            meta_description=meta,
+            review_notes=review_notes,
+        )
+
+    # ------------------------------------------------------------------
     def run(self, topic_title: str, category: str, plans: list[dict[str, Any]]) -> ArticleDraft:
         plans_text = _format_plans_for_prompt(plans)
 

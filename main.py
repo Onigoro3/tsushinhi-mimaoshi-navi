@@ -53,12 +53,16 @@ from blog_auto_post.table_builder import (
     PLAN_TABLE_PLACEHOLDER,
     build_comparison_table_html,
     build_disclaimer_html,
+    build_guide_disclaimer_html,
 )
 
 CATEGORY_ESIM = "海外eSIM比較"
 
 # Pexels検索の対象から除外する渡航先(特定の国・地域を指さない値)
 _GENERIC_DESTINATION_LABELS = {"グローバル共通"}
+
+# 非比較型(ガイド)記事向けの画像検索クエリ(渡航先を持たないため固定の汎用クエリを使う)
+_GUIDE_IMAGE_QUERIES = ["esim smartphone travel", "airport phone travel"]
 
 JST = timezone(timedelta(hours=9))
 
@@ -122,36 +126,56 @@ def main() -> int:
 
     print(f"[main] 選定トピック: {topic['title']} (id={topic['id']})")
 
-    # 2. plans.jsonからプラン情報取得(APIではなくローカルJSON参照) -------------
-    try:
-        plans = get_plans_by_ids(topic["plan_ids"])
-        if not plans:
-            raise PlanRepositoryError("プランデータが1件も取得できませんでした")
-        # バリューコマース(トリファ・airalo・Saily 3社と即時提携済み)のreferralリンクへ変換
-        for p in plans:
-            p["affiliate_url"] = to_affiliate_url(
-                p.get("service_name", ""), raw_url=p.get("official_url", "")
-            )
-        plan_labels = [
-            f"{p['service_name']}「{p['destination']} {p['days']}日間」" for p in plans
-        ]
-        print(f"[main] plans.jsonからプラン {len(plans)} 件取得: {plan_labels}")
-    except Exception as e:  # PlanRepositoryError含む予期せぬ例外も安全に捕捉する
-        notify_failure("plans_fetch", e)
-        return 1
+    # 2026-07-22社長判断: Demonのインデックス率10%(3社比較テンプレの重複性が濃厚な
+    # 原因)への対応として、非比較型(開通手順・端末対応・トラブル対処等)のガイド記事を
+    # 導入した。トピックの article_type が "guide" の場合は plans.json 依存の比較表
+    # パイプラインを丸ごとスキップし、run_guide() の専用経路を使う(未設定時は従来通り
+    # "comparison" として扱うため、既存トピックへの後方互換あり)。
+    article_type = topic.get("article_type", "comparison")
 
-    # 3. 独自スコアリング(お得度判定) ---------------------------------------
-    plans = compute_scores(plans)
+    if article_type == "guide":
+        plans = []
 
-    # 4. Claude記事生成 ----------------------------------------------------
-    try:
-        pipeline = ArticlePipeline(api_key=settings.anthropic_api_key, model=settings.claude_model)
-        draft = pipeline.run(topic["title"], topic["category"], plans)
-        print(f"[main] 記事生成完了: title={draft.title!r}")
-        print(f"[main] 自己レビューメモ: {draft.review_notes}")
-    except Exception as e:
-        notify_failure("article_generation", e)
-        return 1
+        # 4. Claude記事生成(非比較型) ---------------------------------------
+        try:
+            pipeline = ArticlePipeline(api_key=settings.anthropic_api_key, model=settings.claude_model)
+            draft = pipeline.run_guide(topic["title"], topic["category"])
+            print(f"[main] 記事生成完了(非比較型): title={draft.title!r}")
+            print(f"[main] 自己レビューメモ: {draft.review_notes}")
+        except Exception as e:
+            notify_failure("article_generation", e)
+            return 1
+    else:
+        # 2. plans.jsonからプラン情報取得(APIではなくローカルJSON参照) -------------
+        try:
+            plans = get_plans_by_ids(topic["plan_ids"])
+            if not plans:
+                raise PlanRepositoryError("プランデータが1件も取得できませんでした")
+            # バリューコマース(トリファ・airalo・Saily 3社と即時提携済み)のreferralリンクへ変換
+            for p in plans:
+                p["affiliate_url"] = to_affiliate_url(
+                    p.get("service_name", ""), raw_url=p.get("official_url", "")
+                )
+            plan_labels = [
+                f"{p['service_name']}「{p['destination']} {p['days']}日間」" for p in plans
+            ]
+            print(f"[main] plans.jsonからプラン {len(plans)} 件取得: {plan_labels}")
+        except Exception as e:  # PlanRepositoryError含む予期せぬ例外も安全に捕捉する
+            notify_failure("plans_fetch", e)
+            return 1
+
+        # 3. 独自スコアリング(お得度判定) ---------------------------------------
+        plans = compute_scores(plans)
+
+        # 4. Claude記事生成 ----------------------------------------------------
+        try:
+            pipeline = ArticlePipeline(api_key=settings.anthropic_api_key, model=settings.claude_model)
+            draft = pipeline.run(topic["title"], topic["category"], plans)
+            print(f"[main] 記事生成完了: title={draft.title!r}")
+            print(f"[main] 自己レビューメモ: {draft.review_notes}")
+        except Exception as e:
+            notify_failure("article_generation", e)
+            return 1
 
     # 5. 画像挿入(渡航先アイキャッチ+テーマ画像、2026-07-20追加) --------------------
     # last_minute_hotel_navi/main.py(Dragonリポジトリ)と同じ設計をDemonへ横展開。
@@ -162,19 +186,26 @@ def main() -> int:
     # ここで個別にtry/exceptする必要はない。
     body_with_images = draft.body_html
     if settings.pexels_api_key:
-        unique_destinations: list[str] = []
-        for p in plans:
-            dest = (p.get("destination") or "").strip()
-            if dest and dest not in _GENERIC_DESTINATION_LABELS and dest not in unique_destinations:
-                unique_destinations.append(dest)
-            if len(unique_destinations) >= 2:
-                break
+        if article_type == "guide":
+            # 渡航先(destination)を持たないため、固定の汎用クエリで画像検索する
+            dest_queries = list(_GUIDE_IMAGE_QUERIES)
+            alt_text = topic["title"]
+        else:
+            unique_destinations: list[str] = []
+            for p in plans:
+                dest = (p.get("destination") or "").strip()
+                if dest and dest not in _GENERIC_DESTINATION_LABELS and dest not in unique_destinations:
+                    unique_destinations.append(dest)
+                if len(unique_destinations) >= 2:
+                    break
 
-        dest_queries = (
-            pipeline.translate_destination_queries(unique_destinations)
-            if unique_destinations
-            else []
-        )
+            dest_queries = (
+                pipeline.translate_destination_queries(unique_destinations)
+                if unique_destinations
+                else []
+            )
+            alt_text = unique_destinations[0] if unique_destinations else topic["title"]
+
         photos = [
             pexels_client.search_photo(q, settings.pexels_api_key) for q in dest_queries
         ]
@@ -183,7 +214,6 @@ def main() -> int:
         eyecatch_photo = photos[0] if len(photos) >= 1 else None
         theme_photo = photos[1] if len(photos) >= 2 else eyecatch_photo
 
-        alt_text = unique_destinations[0] if unique_destinations else topic["title"]
         body_with_images = insert_theme_image_before_first_h2(
             body_with_images, theme_photo, alt_text
         )
@@ -192,8 +222,14 @@ def main() -> int:
         body_with_images = insert_eyecatch(body_with_images, eyecatch_photo, alt_text)
 
     # 6. 比較表・免責文言の組み込み ------------------------------------------
-    table_html = build_comparison_table_html(plans)
-    disclaimer_html = build_disclaimer_html(plans)
+    # 非比較型(guide)はplans.jsonを一切使わないため比較表を組み込まず、免責文言も
+    # 料金取得日時に触れない汎用版(build_guide_disclaimer_html())を使う。
+    if article_type == "guide":
+        table_html = ""
+        disclaimer_html = build_guide_disclaimer_html()
+    else:
+        table_html = build_comparison_table_html(plans)
+        disclaimer_html = build_disclaimer_html(plans)
 
     final_html = body_with_images.replace(PLAN_TABLE_PLACEHOLDER, table_html)
     if draft.meta_description:
