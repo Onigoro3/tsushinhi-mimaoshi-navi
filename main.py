@@ -55,6 +55,7 @@ from blog_auto_post.table_builder import (
     build_disclaimer_html,
     build_guide_disclaimer_html,
 )
+from sa_common.production_gate import load_department_index_rate
 
 CATEGORY_ESIM = "海外eSIM比較"
 
@@ -110,8 +111,17 @@ def main() -> int:
         return 1
 
     # 1. トピック選択 ----------------------------------------------------
+    # 2026-07-23社長承認(ceo/tasks.md 論点6): 全社共通「量産ゲート」。週次URL
+    # Inspection実測のインデックス率をSupabase経由で読み、pick_topic()側で
+    # 閾値未満なら記事型を制限する。取得失敗時はNoneのままゲートを効かせない
+    # (週次検査未実施時に投稿が止まらないようにするフォールバック)。
     try:
-        topic, all_topics = topics.pick_topic()
+        index_rate = load_department_index_rate("Demon")
+    except Exception:
+        index_rate = None
+
+    try:
+        topic, all_topics = topics.pick_topic(index_rate=index_rate)
     except Exception as e:
         notify_failure("topic_selection", e)
         return 1
