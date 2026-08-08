@@ -186,6 +186,38 @@ def update_entry(
     }
 
 
+def delete_entry(
+    member_uri: str,
+    hatena_id: str,
+    api_key: str,
+    timeout: int = 30,
+) -> dict:
+    """はてなブログの既存記事を削除する(AtomPub DELETE)。
+
+    2026-07-28社長判断により追加: Demonの重複記事(hawaii-summer-3sha)削除対応。
+    member_uri には list_entries() が返す各エントリの member_uri(rel="edit")を渡す。
+
+    Returns: {"status_code": int}
+    """
+    headers = {"X-WSSE": _build_wsse_header(hatena_id, api_key)}
+
+    try:
+        resp = requests.delete(member_uri, headers=headers, timeout=timeout)
+
+        if resp.status_code == 429:
+            time.sleep(3)
+            resp = requests.delete(member_uri, headers=headers, timeout=timeout)
+    except requests.exceptions.RequestException as e:
+        raise HatenaAPIError(f"はてなブログAPIへの接続に失敗しました: {e}") from e
+
+    if resp.status_code not in (200, 204):
+        raise HatenaAPIError(
+            f"はてなブログ記事削除失敗 status={resp.status_code} body={resp.text[:500]}"
+        )
+
+    return {"status_code": resp.status_code}
+
+
 def list_entries(
     hatena_id: str,
     blog_domain: str,

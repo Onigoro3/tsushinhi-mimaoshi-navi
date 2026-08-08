@@ -54,6 +54,7 @@ from blog_auto_post.table_builder import (
     build_comparison_table_html,
     build_disclaimer_html,
     build_guide_disclaimer_html,
+    build_pr_notice_html,
 )
 from sa_common.production_gate import load_department_index_rate
 
@@ -248,6 +249,7 @@ def main() -> int:
         disclaimer_html = build_disclaimer_html(plans)
 
     final_html = body_with_images.replace(PLAN_TABLE_PLACEHOLDER, table_html)
+    final_html = build_pr_notice_html() + final_html
     if draft.meta_description:
         final_html = (
             f'<p style="display:none">{draft.meta_description}</p>\n' + final_html

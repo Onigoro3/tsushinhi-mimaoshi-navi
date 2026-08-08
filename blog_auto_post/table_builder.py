@@ -114,6 +114,19 @@ def build_comparison_table_html(plans: list[dict[str, Any]]) -> str:
     return table_html
 
 
+def build_pr_notice_html() -> str:
+    """記事冒頭に置く簡潔な広告表示(景品表示法ステマ規制対応、2026-08-01)。
+
+    末尾のbuild_disclaimer_html()にも開示文はあるが、消費者庁のステマ規制運用基準は
+    開示が本文の目立つ位置にあることを重視するため、記事冒頭にも短い【PR】表示を置く。
+    """
+    return (
+        '<p style="font-size:0.95em;color:#444;font-weight:bold;margin:0 0 1.2em;">'
+        "【PR】本記事はプロモーションを含みます。"
+        "</p>"
+    )
+
+
 def build_disclaimer_html(plans: list[dict[str, Any]]) -> str:
     """料金・データ容量情報の取得日時の明記(鮮度表記) + アフィリエイト開示文(景品表示法対応)。
 
