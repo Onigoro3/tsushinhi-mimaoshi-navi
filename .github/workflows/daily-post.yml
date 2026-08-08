@@ -44,13 +44,24 @@ jobs:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python main.py
 
-      # 実行失敗時の通知拡張ポイント:
-      # ここに「if: failure()」ステップを追加し、Discord Webhook等へ通知するステップを
-      # 挟むと、実行失敗をGitHub Actionsのログ以外でも即座に検知できるようになる。
-      # 例:
-      # - name: Notify failure to Discord
-      #   if: failure()
-      #   run: |
-      #     curl -H "Content-Type: application/json" \
-      #       -d '{"content":"Demon Daily Auto Post が失敗しました。Actionsログを確認してください。"}' \
-      #       ${{ secrets.DISCORD_WEBHOOK_URL }}
+      # 実行失敗時のDiscord通知(2026-08-08、Fable監査・施策2で「コメントのまま放置」
+      # だった拡張ポイントを実装)。SecretsのDISCORD_WEBHOOK_URLに通知先Webhook URLを
+      # 登録すると有効になる。未設定の場合はこのステップは警告ログを出すだけで正常終了
+      # する(=Secretを設定するだけで追加のコード変更なしに通知が始まる)。
+      # 全4リポジトリ(Dragon/Angel/Demon/Venus)で同じSecret名を使うため、1つの
+      # Discordチャンネルに全部署の失敗を集約できる。
+      # ※このファイルの変更はワークフローの有効/無効状態には影響しない(Demonの
+      #   Daily Auto Postは2026-08-03の社長判断で停止中=論点38の判断待ち。再有効化は
+      #   このコミットでは行っていない)。
+      - name: Notify failure to Discord
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "::warning::DISCORD_WEBHOOK_URL Secretが未設定のため、Discord通知をスキップしました(Secretsに設定すれば有効になります)"
+            exit 0
+          fi
+          curl -sS -X POST -H "Content-Type: application/json" \
+            -d "{\"content\":\"【Demon/海外SIM・eSIM比較ガイド】Daily Auto Post が失敗しました: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "$DISCORD_WEBHOOK_URL"
