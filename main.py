@@ -45,7 +45,7 @@ from blog_auto_post import pexels_client, topics
 from blog_auto_post.affiliate import to_affiliate_url
 from blog_auto_post.article_pipeline import ArticlePipeline
 from blog_auto_post.config import ConfigError, load_settings
-from blog_auto_post.hatena_client import HatenaAPIError, post_entry
+from blog_auto_post.hatena_client import HatenaAPIError, list_entries, post_entry
 from blog_auto_post.image_enrichment import insert_eyecatch, insert_theme_image_before_first_h2
 from blog_auto_post.plans_client import PlanRepositoryError, get_plans_by_ids
 from blog_auto_post.scoring import compute_scores
@@ -54,7 +54,9 @@ from blog_auto_post.table_builder import (
     build_comparison_table_html,
     build_disclaimer_html,
     build_guide_disclaimer_html,
+    build_guide_service_links_html,
     build_pr_notice_html,
+    build_related_articles_html,
 )
 from sa_common.production_gate import load_department_index_rate
 
@@ -65,6 +67,16 @@ _GENERIC_DESTINATION_LABELS = {"グローバル共通"}
 
 # 非比較型(ガイド)記事向けの画像検索クエリ(渡航先を持たないため固定の汎用クエリを使う)
 _GUIDE_IMAGE_QUERIES = ["esim smartphone travel", "airport phone travel"]
+
+# ガイド記事末尾で紹介する提携3社(バリューコマース即時提携済み、affiliate.VC_PID_MAPと対応)。
+# 2026-08-08(Fable監査・発見B): ガイド記事は plans=[] のため収益リンクが1本も入らない
+# 問題への対応。説明文には料金・データ容量等の具体的数値を一切書かない(ガイド記事の
+# 「数値を書かせない」設計原則=ハルシネーション対策・plans.json鮮度問題の回避を維持)。
+_GUIDE_SERVICE_DESCRIPTIONS: dict[str, str] = {
+    "トリファ": "日本発のeSIMサービス。アプリ・サポートが日本語で完結する",
+    "airalo": "世界の幅広い国・地域に対応する大手eSIMストア",
+    "Saily": "Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する",
+}
 
 JST = timezone(timedelta(hours=9))
 
@@ -102,6 +114,45 @@ def notify_failure(stage: str, error: Exception) -> None:
     """
     print(f"::error::[{stage}] 失敗しました: {error}", file=sys.stderr)
     traceback.print_exc()
+
+
+def _build_internal_links_html(settings, primary_category: str, own_title: str) -> str:
+    """同カテゴリの既存記事への内部リンク(最大3本)HTMLを組み立てる。
+
+    2026-08-08(Fable監査・施策4): 孤立ページ解消・クロール導線のため、新規記事の
+    末尾(免責文言の直前)に既存記事への内部リンクを自動挿入する。同カテゴリの
+    過去記事を優先し、足りなければ他カテゴリの新しい記事で最大3本まで埋める
+    (list_entries()ははてなのAtomフィード順=新しい順で返るため、先頭から採るだけで
+    新着優先になる)。特にガイド記事→比較記事への導線は、発見B(ガイド記事の収益
+    経路ゼロ)対応の一部として、読者を収益導線のある比較記事へ回遊させる役割も持つ。
+
+    記事一覧の取得はGETのみで安全。取得に失敗した場合は空文字を返し、投稿自体は
+    必ず継続する(内部リンクは付加要素であり、これを理由に日次投稿を落とさない)。
+    """
+    try:
+        entries = list_entries(
+            settings.hatena_id, settings.hatena_blog_domain, settings.hatena_api_key
+        )
+    except Exception as e:
+        print(f"[main] 内部リンク用の既存記事一覧取得に失敗しました(内部リンクなしで投稿を継続): {e}")
+        return ""
+
+    candidates = [
+        e
+        for e in entries
+        if not e.get("draft") and e.get("url") and e.get("title") and e["title"] != own_title
+    ]
+    same_cat = [
+        e for e in candidates if primary_category and primary_category in e.get("categories", [])
+    ]
+    others = [e for e in candidates if e not in same_cat]
+    picked = (same_cat + others)[:3]
+    if not picked:
+        return ""
+    print(f"[main] 内部リンクを{len(picked)}本挿入します: {[e['title'] for e in picked]}")
+    return build_related_articles_html(
+        [{"title": e["title"], "url": e["url"]} for e in picked]
+    )
 
 
 def main() -> int:
@@ -243,18 +294,49 @@ def main() -> int:
     # 料金取得日時に触れない汎用版(build_guide_disclaimer_html())を使う。
     if article_type == "guide":
         table_html = ""
+        # 2026-08-08(Fable監査・発見B): ガイド記事は plans=[] のため従来は
+        # アフィリエイトリンクが1本も入らなかった(2026-07-22のガイド型全面振替以降、
+        # 収益経路ゼロの記事だけを生産していた)。ガイド記事の「数値を書かない」設計は
+        # 維持したまま、末尾に提携3社のreferralリンクを中立的な紹介形式で追加する。
+        guide_service_links_html = build_guide_service_links_html(
+            [
+                {
+                    "service_name": name,
+                    "affiliate_url": to_affiliate_url(name),
+                    "description": desc,
+                }
+                for name, desc in _GUIDE_SERVICE_DESCRIPTIONS.items()
+            ]
+        )
         disclaimer_html = build_guide_disclaimer_html()
     else:
+        guide_service_links_html = ""
         table_html = build_comparison_table_html(plans)
         disclaimer_html = build_disclaimer_html(plans)
 
+    # 内部リンク(同カテゴリの過去記事優先、最大3本)を免責文言の直前に挿入する
+    # (2026-08-08、Fable監査・施策4。取得失敗時は空文字が返り投稿は継続する)
+    internal_links_html = _build_internal_links_html(settings, topic["category"], draft.title)
+
     final_html = body_with_images.replace(PLAN_TABLE_PLACEHOLDER, table_html)
     final_html = build_pr_notice_html() + final_html
+    # 【重要・順序を変えないこと】メタディスクリプションの隠しpタグは必ず本文全体の
+    # 「先頭」(【PR】表記・アイキャッチ画像より前)に置く。はてなブログは
+    # <meta name="description"> を本文冒頭のテキストから自動生成するため、これが
+    # 先頭に無いと検索結果スニペットが本文冒頭の可視テキスト(最悪はPexelsクレジット
+    # 「Photo by…」)で汚染される(Dragonの2026-07-29投稿の実HTMLで実害確認、
+    # 2026-08-08修正・Fable監査 発見A)。meta_descriptionはarticle_pipeline側の
+    # フォールバックにより常に非空が保証されるが、万一空だった場合は警告で検知する。
     if draft.meta_description:
         final_html = (
             f'<p style="display:none">{draft.meta_description}</p>\n' + final_html
         )
-    final_html += disclaimer_html
+    else:
+        print(
+            "::warning::[main] meta_descriptionが空です(想定外)。検索結果スニペットが"
+            "本文冒頭の可視テキストから自動生成されます(article_pipeline.pyのフォールバックを確認)"
+        )
+    final_html += guide_service_links_html + internal_links_html + disclaimer_html
 
     # 7. はてなブログへ投稿(完全自動公開) -----------------------------------
     # 環境変数 DEMON_DRY_RUN=true (または 1/yes) が設定されている場合のみ、実際の投稿・
@@ -278,6 +360,8 @@ def main() -> int:
         print(f"[main] 投稿予定カテゴリ: {[topic['category'], CATEGORY_ESIM]}")
         print(f"[main] 比較表HTML(検証用、先頭800文字): {table_html[:800]!r}")
         print(f"[main] 免責文言HTML(検証用): {disclaimer_html!r}")
+        print(f"[main] ガイド収益導線HTML(検証用): {guide_service_links_html!r}")
+        print(f"[main] 内部リンクHTML(検証用): {internal_links_html!r}")
         return 0
 
     try:

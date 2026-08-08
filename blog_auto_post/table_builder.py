@@ -20,6 +20,71 @@ from typing import Any
 
 PLAN_TABLE_PLACEHOLDER = "<!--PLAN_TABLE-->"
 
+# 内部リンク(関連記事)ブロックの冪等マーカー(Dragonのapp/blog_auto_post/table_builder.pyと
+# 同一形式。将来update_entry()で記事を再更新する場合に既存ブロックを検出・置換できる)
+RELATED_ARTICLES_START = "<!-- related-articles-block:start -->"
+RELATED_ARTICLES_END = "<!-- related-articles-block:end -->"
+
+
+def build_related_articles_html(links: list[dict[str, str]]) -> str:
+    """「関連記事」セクションのHTMLを組み立てる(内部リンク自動挿入、2026-08-08〜)。
+
+    2026-08-08(Fable監査・施策4): 孤立ページ解消・クロール導線強化のため、新規記事の
+    投稿時に既存記事への内部リンクを自動挿入する。Dragonの内部リンク先行試験
+    (apply_internal_links.py、2026-07-19社長判断)と同じ表示ブロック・冪等マーカー形式。
+    links: [{"title": str, "url": str}, ...]
+    """
+    items_html = "".join(
+        f'<li><a href="{escape(link["url"])}">{escape(link["title"])}</a></li>'
+        for link in links
+        if link.get("url")
+    )
+    if not items_html:
+        return ""
+    return (
+        f"{RELATED_ARTICLES_START}"
+        '<div style="margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;">'
+        '<p style="font-weight:bold;margin:0 0 0.5em;">関連記事</p>'
+        f'<ul style="margin:0;padding-left:1.2em;">{items_html}</ul>'
+        "</div>"
+        f"{RELATED_ARTICLES_END}"
+    )
+
+
+def build_guide_service_links_html(services: list[dict[str, str]]) -> str:
+    """ガイド記事末尾の「紹介サービス一覧」(収益導線)HTMLを組み立てる。
+
+    2026-08-08(Fable監査・発見B): article_type=="guide" は plans=[] となり
+    to_affiliate_url() の変換ブロックごとスキップされるため、2026-07-22のガイド型
+    全面振替以降、Demonの新規記事にはアフィリエイトリンクが1本も存在しなかった
+    (=収益経路ゼロの記事だけを生産していた)。ガイド記事の「具体的な料金・数値を
+    一切書かない」設計(ハルシネーション対策・plans.json鮮度問題の回避)は維持した
+    まま、末尾に3社へのreferralリンクを中立的な紹介形式で置く。
+
+    services: [{"service_name": str, "affiliate_url": str, "description": str}, ...]
+    description には料金・数値を含めないこと(ガイド記事の設計原則を守るため)。
+    リンクは比較表(build_comparison_table_html)と同じ rel="nofollow noopener sponsored"。
+    """
+    items_html = "".join(
+        '<li style="margin:0.4em 0;">'
+        f'<a href="{escape(s["affiliate_url"])}" target="_blank" '
+        'rel="nofollow noopener sponsored">'
+        f'{escape(s["service_name"])}</a>: {escape(s.get("description", ""))}'
+        "</li>"
+        for s in services
+        if s.get("affiliate_url")
+    )
+    if not items_html:
+        return ""
+    return (
+        '<div style="margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;">'
+        '<p style="font-weight:bold;margin:0 0 0.5em;">この記事の内容に対応している主な海外eSIMサービス</p>'
+        '<p style="font-size:0.9em;margin:0 0 0.5em;">実際にeSIMを使ってみる場合は、以下の各社公式サイト/アプリで'
+        "渡航先のプラン・最新料金をご確認ください。</p>"
+        f'<ul style="margin:0;padding-left:1.2em;">{items_html}</ul>'
+        "</div>"
+    )
+
 LOW_RELIABILITY_SERVICES = {"トリファ", "Saily"}
 
 
