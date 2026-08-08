@@ -21,6 +21,7 @@ from __future__ import annotations
 import re
 import sys
 from dataclasses import dataclass
+from html import unescape
 from typing import Any
 
 import anthropic
@@ -38,6 +39,52 @@ FINAL_BODY_MARKER = "### FINAL_BODY"
 
 class TruncatedResponseError(RuntimeError):
     """Claude APIの応答がmax_tokens上限で打ち切られた場合に送出する。"""
+
+
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
+
+# メタディスクリプションのフォールバック生成時に除外する段落
+# (検索結果スニペットにふさわしくない可視テキスト)
+_META_SKIP_PREFIXES = ("Photo by", "【PR】")
+
+
+def _parse_labeled_value(line: str, label: str) -> str | None:
+    """「TITLE: 〜」「META: 〜」形式の1行から値を取り出す(表記ゆれ耐性版)。
+
+    2026-08-08修正(Fable監査・発見A、Dragonのapp/blog_auto_post/article_pipeline.pyと
+    同一対策): 従来は line.startswith("META:") の完全一致だったため、LLMが「**META:**」
+    (markdown強調)や「META:」(全角コロン)等の表記ゆれで返すと黙って取りこぼし、
+    meta="" のまま投稿されていた。メタが空だとmain.py側で隠しpタグ
+    (<p style="display:none">)の挿入自体がスキップされ、はてなブログの自動メタ生成が
+    本文冒頭の可視テキスト(本文がH2始まりの記事ではPexelsクレジット「Photo by…」)を
+    拾い、検索結果スニペットが破損する実害がDragonの本番記事(2026-07-29投稿)の
+    実HTMLで確認された。markdown装飾・全角コロン・大文字小文字ゆれを許容してパースする。
+    """
+    stripped = line.strip().lstrip("*#>-` ").strip()
+    if not stripped.upper().startswith(label.upper()):
+        return None
+    rest = stripped[len(label):].lstrip().lstrip("*`").lstrip()
+    if not rest or rest[0] not in (":", "："):
+        return None
+    return rest[1:].strip().strip("*`").strip()
+
+
+def _fallback_meta_description(context_label: str, body_html: str, max_len: int = 118) -> str:
+    """LLMがメタディスクリプションを返さなかった場合の決定的フォールバック。
+
+    本文HTMLの最初の「実質的な」段落テキスト(画像クレジット・PR表記・極端に短い
+    断片を除く)を規定文字数で切り出す。それも見つからない場合はトピック名ベースの
+    定型文を返す。いずれの経路でも必ず非空文字列を返すことで、「メタ空 → 隠しpタグ
+    未挿入 → スニペット破損」の連鎖を根元で断つ(経緯は _parse_labeled_value 参照)。
+    """
+    for para in re.finditer(r"<p[^>]*>(.*?)</p>", body_html, re.DOTALL | re.IGNORECASE):
+        text = unescape(_HTML_TAG_RE.sub("", para.group(1))).strip()
+        if not text or len(text) < 40:
+            continue
+        if any(text.startswith(prefix) for prefix in _META_SKIP_PREFIXES):
+            continue
+        return text[:max_len]
+    return f"{context_label}のポイントを分かりやすく解説します。"[:max_len]
 
 
 @dataclass
@@ -257,15 +304,21 @@ META: (110〜120文字程度のメタディスクリプション)
         title = topic_title
         meta = ""
         for line in raw.splitlines():
-            line = line.strip()
-            if line.startswith("TITLE:"):
-                title = line[len("TITLE:"):].strip()
-            elif line.startswith("META:"):
-                meta = line[len("META:"):].strip()
+            parsed_title = _parse_labeled_value(line, "TITLE")
+            if parsed_title is not None:
+                title = parsed_title
+                continue
+            parsed_meta = _parse_labeled_value(line, "META")
+            if parsed_meta is not None:
+                meta = parsed_meta
 
         # タイトル途中切れバグ対策: 極端に短い(=生成途中で切れた)場合はtopic_titleへフォールバック
         if len(title) < 10:
             title = topic_title
+        # メタは空のまま返さない(2026-08-08修正・Fable監査 発見A。
+        # 経緯・理由は _parse_labeled_value / _fallback_meta_description のdocstring参照)
+        if not meta:
+            meta = _fallback_meta_description(topic_title, body_html)
         return title, meta
 
     # ------------------------------------------------------------------
