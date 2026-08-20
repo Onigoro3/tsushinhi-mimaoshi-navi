@@ -85,7 +85,9 @@ def build_guide_service_links_html(services: list[dict[str, str]]) -> str:
         "</div>"
     )
 
-LOW_RELIABILITY_SERVICES = {"トリファ", "Saily"}
+# 【2026-08-20】トリファはバリューコマース提携終了(2026-08-25)のため今後の新規記事対象外
+# (affiliate.py参照)。このセットはコード内で未参照だが、履歴として残す。
+LOW_RELIABILITY_SERVICES = {"Saily"}
 
 
 def _data_label(p: dict[str, Any]) -> str:
@@ -165,12 +167,12 @@ def build_comparison_table_html(plans: list[dict[str, Any]]) -> str:
     )
 
     if has_low_reliability:
-        # 社長依頼: トリファ・Sailyのデータを使う記事では、比較表のすぐ近くに
+        # 社長依頼: 信頼度lowのデータ(Saily等)を使う記事では、比較表のすぐ近くに
         # 価格変動リスクの注意書きを明記する。
         table_html += (
             '<p style="background:#fff8e1;border-left:4px solid #f5c542;padding:8px 12px;'
             'font-size:0.9em;margin-top:8px;">'
-            "※上記のうちトリファ・Sailyの料金は、公式サイトへの直接アクセスが難しく"
+            "※上記のうち信頼度が低いサービスの料金は、公式サイトへの直接アクセスが難しく"
             "二次情報源を突き合わせて収集したデータです。価格は変動する可能性があるため、"
             "購入前に必ず公式サイト/アプリで最新価格をご確認ください。"
             "</p>"

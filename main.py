@@ -68,12 +68,12 @@ _GENERIC_DESTINATION_LABELS = {"グローバル共通"}
 # 非比較型(ガイド)記事向けの画像検索クエリ(渡航先を持たないため固定の汎用クエリを使う)
 _GUIDE_IMAGE_QUERIES = ["esim smartphone travel", "airport phone travel"]
 
-# ガイド記事末尾で紹介する提携3社(バリューコマース即時提携済み、affiliate.VC_PID_MAPと対応)。
+# ガイド記事末尾で紹介する提携サービス(バリューコマース即時提携済み、affiliate.VC_PID_MAPと対応)。
 # 2026-08-08(Fable監査・発見B): ガイド記事は plans=[] のため収益リンクが1本も入らない
 # 問題への対応。説明文には料金・データ容量等の具体的数値を一切書かない(ガイド記事の
 # 「数値を書かせない」設計原則=ハルシネーション対策・plans.json鮮度問題の回避を維持)。
+# 【2026-08-20】トリファはバリューコマース提携終了(2026-08-25)のため除外(affiliate.py参照)。
 _GUIDE_SERVICE_DESCRIPTIONS: dict[str, str] = {
-    "トリファ": "日本発のeSIMサービス。アプリ・サポートが日本語で完結する",
     "airalo": "世界の幅広い国・地域に対応する大手eSIMストア",
     "Saily": "Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する",
 }
