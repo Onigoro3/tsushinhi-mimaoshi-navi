@@ -48,7 +48,7 @@ class Settings:
 
 
 REQUIRED_ENV_VARS = [
-    "ANTHROPIC_API_KEY",
+    # "ANTHROPIC_API_KEY",  # 2026-09-15: Max→Gemini 3 Flash に切替(sa_llm.py)、クレジットは使わない
     "HATENA_ID",
     "HATENA_BLOG_DOMAIN",
     "HATENA_API_KEY",
@@ -66,7 +66,7 @@ def load_settings() -> Settings:
         )
 
     return Settings(
-        anthropic_api_key=os.environ["ANTHROPIC_API_KEY"],
+        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
         claude_model=os.environ.get("CLAUDE_MODEL", "claude-sonnet-5"),
         hatena_id=os.environ["HATENA_ID"],
         hatena_blog_domain=os.environ["HATENA_BLOG_DOMAIN"],

@@ -9,8 +9,9 @@ name: Daily Auto Post (Demon - 海外SIM・eSIM比較ガイド)
 # 5へずらして負荷集中を避ける(SA全体点検でDragon/Angel当日分の実行が記録されて
 # いなかったことを確認したことを受けた予防的対応)。
 on:
-  schedule:
-    - cron: "5 2 * * *"
+  # 2026-09-15 社長指示: 定期実行はPCの予定タスクへ移した(文章はMax→Gemini 3 Flash、Claude APIクレジットは使わない)
+  # schedule:
+  #  - cron: "5 2 * * *"
   workflow_dispatch: {}  # 手動実行・動作確認用
 
 permissions:

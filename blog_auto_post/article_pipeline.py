@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from html import unescape
 from typing import Any
 
-import anthropic
+import sa_llm  # 2026-09-15: Max→Gemini 3 Flash(Claude APIクレジットは使わない)
 
 from .table_builder import PLAN_TABLE_PLACEHOLDER
 
@@ -126,7 +126,7 @@ def _format_plans_for_prompt(plans: list[dict[str, Any]]) -> str:
 
 class ArticlePipeline:
     def __init__(self, api_key: str, model: str):
-        self._client = anthropic.Anthropic(api_key=api_key)
+        self._client = None  # 2026-09-15: sa_llm.generate を使う
         self._model = model
 
     def _call(
@@ -136,16 +136,8 @@ class ArticlePipeline:
         max_tokens: int,
         raise_on_truncation: bool = False,
     ) -> str:
-        resp = self._client.messages.create(
-            model=self._model,
-            max_tokens=max_tokens,
-            system=system,
-            messages=[{"role": "user", "content": user_content}],
-        )
-        text = "".join(
-            block.text for block in resp.content if getattr(block, "type", "") == "text"
-        ).strip()
-        if resp.stop_reason == "max_tokens":
+        text, truncated = sa_llm.generate(system, user_content, max_tokens)
+        if truncated:
             if raise_on_truncation:
                 # タイトル生成のように短く構造化された出力を期待する箇所でのみ送出する。
                 # 呼び出し側でmax_tokensを引き上げて再試行 or フォールバックする。

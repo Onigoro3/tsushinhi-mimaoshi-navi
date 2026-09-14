@@ -13,8 +13,9 @@ name: Daily Post Watchdog
 # 実際に二重に発火しても、main.py側に実装済みの「本日投稿済みならスキップ」ガードが
 # 最終防衛線として機能する。
 on:
-  schedule:
-    - cron: "0 6 * * *"
+  # 2026-09-15 社長指示: 定期実行はPCの予定タスクへ移した(文章はMax→Gemini 3 Flash、Claude APIクレジットは使わない)
+  # schedule:
+  #  - cron: "0 6 * * *"
   workflow_dispatch: {}  # 手動実行・動作確認用
 
 permissions:
