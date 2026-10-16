@@ -15,8 +15,12 @@ LLMにはこの完成済みHTMLブロックを記事内の適切な位置に挿�
 """
 from __future__ import annotations
 
+import re
+import zlib
 from html import escape
 from typing import Any
+
+from .affiliate import to_affiliate_url
 
 PLAN_TABLE_PLACEHOLDER = "<!--PLAN_TABLE-->"
 
@@ -248,3 +252,220 @@ def build_guide_disclaimer_html() -> str:
         "経由してお申し込みされた場合、当サイトが紹介料を受け取ることがあります。"
         "</p>"
     )
+
+
+# ---------------------------------------------------------------------------
+# 【2026-10-17】社長「1A 2A 3A 4A。URLも最後だけでなく最初と中当たりにも」
+# - 1A: 提携リンクを冒頭(公式ページの案内箱)・本文の中ほど・末尾の3か所に置く
+# - 4A: 比較表にグローバルWiFi(レンタルWiFi)の行を足す/airaloは「WEB(ブラウザ)から購入」を明記
+#       (airaloはアプリ経由の注文だと紹介料の対象外のため。読者向けには「アプリ不要」として案内する)
+# - 3A: 手順系(ガイド)記事の末尾に、購入前の比較・選び方の記事への「次に読む」を置く(同ブログ内のみ)
+# 料金・容量などの数値はここには一切書かない(数値は plans.json 由来の比較表だけ)。
+# 既存記事の一括修正(ai-company/scheduled/demon_links/convert.py)も同じ関数を使う。
+# 各ブロックはコメントの目印で二重挿入を防ぐ。
+# ---------------------------------------------------------------------------
+CTA_TOP_MARK = "<!-- demon-cta:top -->"
+CTA_MID_MARK = "<!-- demon-cta:mid -->"
+CTA_END_MARK = "<!-- demon-cta:end -->"
+NEXT_READ_MARK = "<!-- demon-next-read -->"
+WIFI_ROW_MARK = "<!-- demon-wifi-row -->"
+
+AIRALO_WEB_NOTE = "アプリを入れなくても、公式のWEBサイト(ブラウザ)から購入できます"
+
+
+def _aff_link(service_name: str, label: str | None = None) -> str:
+    url = to_affiliate_url(service_name)
+    return (
+        f'<a href="{escape(url)}" target="_blank" rel="nofollow noopener sponsored">'
+        f"{escape(label or service_name)}</a>"
+    )
+
+
+def build_top_cta_html() -> str:
+    """冒頭(最初の見出しの前)に置く、公式ページの案内箱。"""
+    return (
+        f"{CTA_TOP_MARK}"
+        '<div style="margin:1.2em 0;padding:0.8em 1em;border:1px solid #cfd8dc;border-radius:4px;background:#f7fafc;">'
+        '<p style="font-weight:bold;margin:0 0 0.4em;">先に公式ページを見ておきたい方へ</p>'
+        '<p style="margin:0;font-size:0.95em;">このブログで比べている海外eSIMは次の2つです。'
+        "料金や対応国は変わることがあるので、決める前に公式ページで今の内容を確かめてください。</p>"
+        '<ul style="margin:0.4em 0 0;padding-left:1.2em;font-size:0.95em;">'
+        f'<li>{_aff_link("airalo")}: {AIRALO_WEB_NOTE}</li>'
+        f'<li>{_aff_link("Saily")}: アプリで購入から管理まで行うeSIM</li>'
+        "</ul></div>"
+    )
+
+
+def build_mid_cta_html() -> str:
+    """本文の中ほど(見出しの区切り)に置く一文。押し売りにならない短さにする。"""
+    return (
+        f"{CTA_MID_MARK}"
+        '<p style="margin:1.5em 0;padding:0.6em 1em;border-left:4px solid #90a4ae;background:#f7fafc;font-size:0.95em;">'
+        f"行き先のプランがあるかは、{_aff_link('airalo')}(WEBサイトから購入可)か"
+        f"{_aff_link('Saily')}で国名を選ぶと確かめられます。</p>"
+    )
+
+
+def insert_top_cta(html: str) -> str:
+    """最初の<h2>の直前に冒頭の案内箱を入れる(見出しが無ければ何もしない)。"""
+    if CTA_TOP_MARK in html:
+        return html
+    i = html.find("<h2")
+    if i < 0:
+        return html
+    return html[:i] + build_top_cta_html() + "\n" + html[i:]
+
+
+def insert_mid_cta(html: str) -> str:
+    """本文の中ほどの<h2>の直前に一文を入れる。
+
+    すでに中ほど(全体の35〜70%)に提携リンク(比較表など)があれば入れない(連打を避ける)。
+    候補の見出しは2本目以降で、「よくある質問」「まとめ」の見出しは避ける。
+    """
+    if CTA_MID_MARK in html:
+        return html
+    n = len(html)
+    if n == 0:
+        return html
+    for m in re.finditer(r"valuecommerce\.com", html):
+        if 0.35 <= m.start() / n <= 0.70:
+            return html
+    cands = []
+    for m in list(re.finditer(r"<h2[\s>]", html))[1:]:
+        end = html.find("</h2>", m.start())
+        head = re.sub(r"<[^>]+>", "", html[m.start():end if end > 0 else m.start() + 200])
+        if any(w in head for w in ("よくある質問", "まとめ", "Q&amp;A", "Q&A")):
+            continue
+        cands.append(m.start())
+    if not cands:
+        return html
+    pos = min(cands, key=lambda p: abs(p - n / 2))
+    return html[:pos] + build_mid_cta_html() + "\n" + html[pos:]
+
+
+def build_wifi_table_row_html() -> str:
+    """比較表に足すグローバルWiFi(レンタルWiFi)の行。料金データを持たないので数値は書かない。"""
+    return (
+        f"{WIFI_ROW_MARK}<tr>"
+        "<td>グローバルWiFi<br><small>海外WiFiレンタル(eSIMではありません)</small></td>"
+        "<td>渡航日数に合わせて借りる</td>"
+        "<td>プランにより異なる</td>"
+        "<td>公式サイトで確認</td>"
+        "<td>-</td><td>-</td>"
+        "<td>対象外<br><small>端末を借りる方式のため</small></td>"
+        f'<td>{_aff_link("グローバルWiFi", "公式サイトで見る")}'
+        "<br><small>複数人で使う・eSIM非対応の端末向け</small></td>"
+        "</tr>"
+    )
+
+
+def add_wifi_row_to_table(html: str) -> str:
+    """比較表(tbody)の最後にグローバルWiFiの行を足す。表が無い・入っていれば何もしない。"""
+    if WIFI_ROW_MARK in html:
+        return html
+    i = html.find("</tbody>")
+    if i < 0:
+        return html
+    return html[:i] + build_wifi_table_row_html() + html[i:]
+
+
+# 末尾の紹介(収益導線)。比較記事・ガイド記事の両方で使う。
+END_SERVICES: list[dict[str, str]] = [
+    {"service_name": "airalo", "description": "世界の幅広い国・地域に対応する大手eSIMストア。" + AIRALO_WEB_NOTE},
+    {"service_name": "Saily", "description": "Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する"},
+    {"service_name": "グローバルWiFi", "description": "eSIMではなく海外WiFiレンタル。2人以上で通信を分け合う・eSIM非対応の端末を使う場合の選択肢(空港などで受け取り・返却)"},
+]
+
+
+def build_end_services_html(exclude: tuple[str, ...] = ()) -> str:
+    """末尾の「主なサービス」箱(eSIM 2社+レンタルWiFi)。exclude に挙げたサービスは並べない。"""
+    items_html = "".join(
+        '<li style="margin:0.4em 0;">'
+        f'{_aff_link(s["service_name"])}: {escape(s["description"])}'
+        "</li>"
+        for s in END_SERVICES
+        if s["service_name"] not in exclude
+    )
+    return (
+        f"{CTA_END_MARK}"
+        '<div style="margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;">'
+        '<p style="font-weight:bold;margin:0 0 0.5em;">この記事に関係する主なサービス(eSIM・レンタルWiFi)</p>'
+        '<p style="font-size:0.9em;margin:0 0 0.5em;">実際に申し込む前に、各社の公式サイトで'
+        "渡航先のプラン・最新料金をご確認ください。</p>"
+        f'<ul style="margin:0;padding-left:1.2em;">{items_html}</ul>'
+        "</div>"
+    )
+
+
+def build_next_read_html(links: list[dict[str, str]]) -> str:
+    """手順系の記事の末尾に置く「次に読む」(同ブログ内の比較・選び方の記事)。"""
+    items_html = "".join(
+        f'<li><a href="{escape(link["url"])}">{escape(link["title"])}</a></li>'
+        for link in links
+        if link.get("url")
+    )
+    if not items_html:
+        return ""
+    return (
+        f"{NEXT_READ_MARK}"
+        '<div style="margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;">'
+        '<p style="font-weight:bold;margin:0 0 0.5em;">次に読む:これから買う方へ(国別の比較・選び方)</p>'
+        f'<ul style="margin:0;padding-left:1.2em;">{items_html}</ul>'
+        "</div>"
+    )
+
+
+_COUNTRY_WORDS: dict[str, tuple[str, ...]] = {
+    "韓国": ("韓国",),
+    "台湾": ("台湾",),
+    "アメリカ": ("アメリカ", "米国", "ハワイ"),
+    "タイ": ("タイ",),
+    "ヨーロッパ": ("ヨーロッパ", "欧州"),
+}
+
+
+def is_buying_guide_title(title: str) -> bool:
+    """購入前の読者向け(国別の比較・選び方)の記事か(タイトルで判定)。"""
+    return any(w in title for w in ("比較", "選び方", "どっち", "どれが安い"))
+
+
+def pick_buying_guides(
+    entries: list[dict[str, Any]], own_title: str, own_text: str, k: int = 2
+) -> list[dict[str, str]]:
+    """手順系の記事から誘導する、購入前向けの記事を最大k本選ぶ(同ブログ内のみ)。
+
+    1本目: 本文に国名が2回以上出てくれば、その国の比較記事(新しい順)。無ければ一般的な選び方の記事。
+    2本目以降: 比較記事。毎回同じ記事に偏らないよう、自分のタイトルから決まる順番でずらして選ぶ。
+    entries は hatena_client.list_entries() の戻り値(新しい順)。
+    """
+    pool = [
+        e for e in entries
+        if not e.get("draft") and e.get("url") and e.get("title")
+        and e["title"] != own_title and is_buying_guide_title(e["title"])
+        and "トリファ" not in e["title"]  # 提携終了のトリファを比べている古い記事へは誘導しない
+    ]
+    all_country_words = [w for ws in _COUNTRY_WORDS.values() for w in ws]
+    general = [e for e in pool if "選び方" in e["title"] and not any(w in e["title"] for w in all_country_words)]
+    compare = [e for e in pool if "比較" in e["title"]]
+    seed = zlib.crc32(own_title.encode("utf-8"))
+
+    def rotated(lst: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        if not lst:
+            return []
+        r = seed % len(lst)
+        return lst[r:] + lst[:r]
+
+    counts = {c: sum(own_text.count(w) for w in ws) for c, ws in _COUNTRY_WORDS.items()}
+    # 「タイ」は「タイミング」「タイプ」等に含まれるので数え直す
+    counts["タイ"] = len(re.findall(r"タイ(?!ミング|プ|ム|トル|ヤ|ル|ト)", own_text))
+    best = max(counts, key=lambda c: counts[c])
+    picked: list[dict[str, Any]] = []
+    if counts[best] >= 2:
+        picked += [e for e in compare if any(w in e["title"] for w in _COUNTRY_WORDS[best])][:1]
+    picked += rotated(general)[:1]
+    for e in rotated(compare):
+        if len(picked) >= k:
+            break
+        if e not in picked:
+            picked.append(e)
+    return [{"title": e["title"], "url": e["url"]} for e in picked[:k]]

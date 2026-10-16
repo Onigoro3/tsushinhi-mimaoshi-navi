@@ -54,9 +54,14 @@ from blog_auto_post.table_builder import (
     build_comparison_table_html,
     build_disclaimer_html,
     build_guide_disclaimer_html,
-    build_guide_service_links_html,
+    add_wifi_row_to_table,
+    build_end_services_html,
+    build_next_read_html,
     build_pr_notice_html,
     build_related_articles_html,
+    insert_mid_cta,
+    insert_top_cta,
+    pick_buying_guides,
 )
 from sa_common.production_gate import load_department_index_rate
 
@@ -74,6 +79,7 @@ _GUIDE_IMAGE_QUERIES = ["esim smartphone travel", "airport phone travel"]
 # 「数値を書かせない」設計原則=ハルシネーション対策・plans.json鮮度問題の回避を維持)。
 # 【2026-08-20】トリファはバリューコマース提携終了(2026-08-25)のため除外(affiliate.py参照)。
 _GUIDE_SERVICE_DESCRIPTIONS: dict[str, str] = {
+    # 2026-10-17: 末尾の紹介箱は table_builder.END_SERVICES に移った(この辞書は未使用・履歴)
     "airalo": "世界の幅広い国・地域に対応する大手eSIMストア",
     "Saily": "Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する",
 }
@@ -116,7 +122,18 @@ def notify_failure(stage: str, error: Exception) -> None:
     traceback.print_exc()
 
 
-def _build_internal_links_html(settings, primary_category: str, own_title: str) -> str:
+def _list_entries_safe(settings) -> list:
+    """既存記事一覧(GETのみ)。失敗したら空(内部リンク・次に読むが付かないだけで投稿は続ける)。"""
+    try:
+        return list_entries(
+            settings.hatena_id, settings.hatena_blog_domain, settings.hatena_api_key
+        )
+    except Exception as e:
+        print(f"[main] 内部リンク用の既存記事一覧取得に失敗しました(内部リンクなしで投稿を継続): {e}")
+        return []
+
+
+def _build_internal_links_html(entries: list, primary_category: str, own_title: str) -> str:
     """同カテゴリの既存記事への内部リンク(最大3本)HTMLを組み立てる。
 
     2026-08-08(Fable監査・施策4): 孤立ページ解消・クロール導線のため、新規記事の
@@ -129,14 +146,6 @@ def _build_internal_links_html(settings, primary_category: str, own_title: str) 
     記事一覧の取得はGETのみで安全。取得に失敗した場合は空文字を返し、投稿自体は
     必ず継続する(内部リンクは付加要素であり、これを理由に日次投稿を落とさない)。
     """
-    try:
-        entries = list_entries(
-            settings.hatena_id, settings.hatena_blog_domain, settings.hatena_api_key
-        )
-    except Exception as e:
-        print(f"[main] 内部リンク用の既存記事一覧取得に失敗しました(内部リンクなしで投稿を継続): {e}")
-        return ""
-
     candidates = [
         e
         for e in entries
@@ -292,33 +301,36 @@ def main() -> int:
     # 6. 比較表・免責文言の組み込み ------------------------------------------
     # 非比較型(guide)はplans.jsonを一切使わないため比較表を組み込まず、免責文言も
     # 料金取得日時に触れない汎用版(build_guide_disclaimer_html())を使う。
+    # 【2026-10-17】社長「1A 2A 3A 4A」: 提携リンクは冒頭・中ほど・末尾の3か所。末尾の紹介箱は
+    # 比較記事にも置き(従来はガイド記事のみ)、グローバルWiFi(レンタルWiFi)も並べる。比較表にも
+    # グローバルWiFiの行を足す。airaloは「WEBから購入」を案内に入れる(table_builder 末尾参照)。
     if article_type == "guide":
         table_html = ""
         # 2026-08-08(Fable監査・発見B): ガイド記事は plans=[] のため従来は
         # アフィリエイトリンクが1本も入らなかった(2026-07-22のガイド型全面振替以降、
         # 収益経路ゼロの記事だけを生産していた)。ガイド記事の「数値を書かない」設計は
         # 維持したまま、末尾に提携3社のreferralリンクを中立的な紹介形式で追加する。
-        guide_service_links_html = build_guide_service_links_html(
-            [
-                {
-                    "service_name": name,
-                    "affiliate_url": to_affiliate_url(name),
-                    "description": desc,
-                }
-                for name, desc in _GUIDE_SERVICE_DESCRIPTIONS.items()
-            ]
-        )
+        # 2026-10-17: 末尾の紹介箱は build_end_services_html()(airalo・Saily・グローバルWiFi)に一本化。
         disclaimer_html = build_guide_disclaimer_html()
     else:
-        guide_service_links_html = ""
-        table_html = build_comparison_table_html(plans)
+        table_html = add_wifi_row_to_table(build_comparison_table_html(plans))
         disclaimer_html = build_disclaimer_html(plans)
+    guide_service_links_html = build_end_services_html()
 
     # 内部リンク(同カテゴリの過去記事優先、最大3本)を免責文言の直前に挿入する
     # (2026-08-08、Fable監査・施策4。取得失敗時は空文字が返り投稿は継続する)
-    internal_links_html = _build_internal_links_html(settings, topic["category"], draft.title)
+    entries = _list_entries_safe(settings)
+    internal_links_html = _build_internal_links_html(entries, topic["category"], draft.title)
+    # 3A(2026-10-17): 手順系(ガイド)記事の末尾に、購入前向けの比較・選び方の記事への「次に読む」
+    next_read_html = (
+        build_next_read_html(pick_buying_guides(entries, draft.title, draft.body_html))
+        if article_type == "guide"
+        else ""
+    )
 
     final_html = body_with_images.replace(PLAN_TABLE_PLACEHOLDER, table_html)
+    # 1A(2026-10-17): 冒頭(最初の見出しの前)と中ほど(見出しの区切り)にも提携リンク
+    final_html = insert_mid_cta(insert_top_cta(final_html))
     final_html = build_pr_notice_html() + final_html
     # 【重要・順序を変えないこと】メタディスクリプションの隠しpタグは必ず本文全体の
     # 「先頭」(【PR】表記・アイキャッチ画像より前)に置く。はてなブログは
@@ -336,7 +348,7 @@ def main() -> int:
             "::warning::[main] meta_descriptionが空です(想定外)。検索結果スニペットが"
             "本文冒頭の可視テキストから自動生成されます(article_pipeline.pyのフォールバックを確認)"
         )
-    final_html += guide_service_links_html + internal_links_html + disclaimer_html
+    final_html += guide_service_links_html + next_read_html + internal_links_html + disclaimer_html
 
     # 7. はてなブログへ投稿(完全自動公開) -----------------------------------
     # 環境変数 DEMON_DRY_RUN=true (または 1/yes) が設定されている場合のみ、実際の投稿・
@@ -362,6 +374,7 @@ def main() -> int:
         print(f"[main] 免責文言HTML(検証用): {disclaimer_html!r}")
         print(f"[main] ガイド収益導線HTML(検証用): {guide_service_links_html!r}")
         print(f"[main] 内部リンクHTML(検証用): {internal_links_html!r}")
+        print(f"[main] 次に読むHTML(検証用): {next_read_html!r}")
         return 0
 
     try:
