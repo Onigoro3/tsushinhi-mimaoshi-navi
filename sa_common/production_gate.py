@@ -35,6 +35,12 @@ def should_restrict_to_new_format(index_rate: float, threshold: float = 0.5) -> 
 def load_department_index_rate(department_key: str) -> float | None:
     """Supabase(key="index_rate_state")から自部署分のインデックス率(0.0〜1.0)を読む。
 
+    2026-10-19 社長裁定(質問シート10-18 Q3「OK」=論点279(b)): ゲートの入力値は
+    生の索引率(直近30本)ではなく**調整索引率**(公開から8日以上=D+8以上の記事だけを
+    分母にした率。`adjusted_index_rate`。weekly_index_check.pyが算出)。生の率は投稿
+    ペースの関数で、速く投稿する部署ほど未評価の新しい記事で低く出るため。
+    調整索引率がまだ無い(旧形式のキャッシュ・分母0本)ときだけ生の索引率を使う。
+
     週次検査未実施・Supabase接続エラー・該当部署のデータが無い場合はいずれも
     Noneを返す(呼び出し側でゲートを効かせない=投稿を止めないフォールバック)。
     """
@@ -47,7 +53,9 @@ def load_department_index_rate(department_key: str) -> float | None:
     entry = data.get(department_key)
     if not isinstance(entry, dict):
         return None
-    rate = entry.get("index_rate")
+    rate = entry.get("adjusted_index_rate")
+    if not isinstance(rate, (int, float)):
+        rate = entry.get("index_rate")
     if not isinstance(rate, (int, float)):
         return None
     return float(rate)
