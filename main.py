@@ -216,7 +216,8 @@ def main() -> int:
         # 4. Claude記事生成(非比較型) ---------------------------------------
         try:
             pipeline = ArticlePipeline(api_key=settings.anthropic_api_key, model=settings.claude_model)
-            draft = pipeline.run_guide(topic["title"], topic["category"])
+            # 2026-10-25: category の無いトピックで KeyError になり、その日の投稿が止まった。無ければ「選び方ガイド」
+            draft = pipeline.run_guide(topic["title"], topic.get("category") or "選び方ガイド")
             print(f"[main] 記事生成完了(非比較型): title={draft.title!r}")
             print(f"[main] 自己レビューメモ: {draft.review_notes}")
         except Exception as e:
