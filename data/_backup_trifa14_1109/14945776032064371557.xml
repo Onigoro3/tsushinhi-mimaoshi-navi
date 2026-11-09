@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entry xmlns="http://www.w3.org/2005/Atom"
+       xmlns:app="http://www.w3.org/2007/app">
+<id>tag:blog.hatena.ne.jp,2013:blog-MagicaiDemon-14945776032052991907-14945776032064371557</id>
+<link rel="edit" href="https://blog.hatena.ne.jp/MagicaiDemon/magicaidemon.hatenablog.com/atom/entry/14945776032064371557"/>
+<link rel="alternate" type="text/html" href="https://magicaidemon.hatenablog.com/entry/2026/08/13/131647"/>
+
+<author><name>MagicaiDemon</name></author>
+<title>海外eSIMの決済・返金トラブル対処法|未開通時の申請手順も解説</title>
+<updated>2026-08-20T16:12:52+09:00</updated>
+<published>2026-08-13T13:16:47+09:00</published>
+<app:edited>2026-10-17T02:40:29+09:00</app:edited>
+<summary type="text">海外eSIMでクレカが通らない、二重請求される、届いたのに開通しないといったトラブルの原因と対処法を解説。返金・キャンセル申請の条件やサポート窓口への伝え方まで実体験を交えて詳しく紹介します。 【PR】本記事はプロモーションを含みます。Photo by Jacob on Pexe…</summary>
+<content type="text/html">&lt;p style=&quot;display:none&quot;&gt;海外eSIMでクレカが通らない、二重請求される、届いたのに開通しないといったトラブルの原因と対処法を解説。返金・キャンセル申請の条件やサポート窓口への伝え方まで実体験を交えて詳しく紹介します。&lt;/p&gt;
+&lt;p style=&quot;font-size:0.95em;color:#444;font-weight:bold;margin:0 0 1.2em;&quot;&gt;【PR】本記事はプロモーションを含みます。&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://images.pexels.com/photos/20805605/pexels-photo-20805605.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;h=650&amp;amp;w=940&quot; alt=&quot;海外eSIMの支払い・返金トラブル対処法|クレカが通らない・二重請求・未開通時の申請手順&quot; loading=&quot;lazy&quot; style=&quot;max-width:100%;height:auto;border-radius:6px;&quot;&gt;&lt;br&gt;&lt;small style=&quot;color:#999;&quot;&gt;Photo by &lt;a href=&quot;https://www.pexels.com/@jacob-2102693&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Jacob&lt;/a&gt; on &lt;a href=&quot;https://www.pexels.com/photo/smartphone-suitcase-and-passport-20805605/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Pexels&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://images.pexels.com/photos/15068317/pexels-photo-15068317.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;h=650&amp;amp;w=940&quot; alt=&quot;海外eSIMの支払い・返金トラブル対処法|クレカが通らない・二重請求・未開通時の申請手順&quot; loading=&quot;lazy&quot; style=&quot;max-width:100%;height:auto;border-radius:6px;&quot;&gt;&lt;br&gt;&lt;small style=&quot;color:#999;&quot;&gt;Photo by &lt;a href=&quot;https://www.pexels.com/@towfiqu-barbhuiya-3440682&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Towfiqu barbhuiya&lt;/a&gt; on &lt;a href=&quot;https://www.pexels.com/photo/person-holding-a-phone-15068317/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Pexels&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;!-- demon-cta:top --&gt;&lt;div style=&quot;margin:1.2em 0;padding:0.8em 1em;border:1px solid #cfd8dc;border-radius:4px;background:#f7fafc;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.4em;&quot;&gt;先に公式ページを見ておきたい方へ&lt;/p&gt;&lt;p style=&quot;margin:0;font-size:0.95em;&quot;&gt;このブログで比べている海外eSIMは次の2つです。料金や対応国は変わることがあるので、決める前に公式ページで今の内容を確かめてください。&lt;/p&gt;&lt;ul style=&quot;margin:0.4em 0 0;padding-left:1.2em;font-size:0.95em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;: アプリを入れなくても、公式のWEBサイト(ブラウザ)から購入できます&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;: アプリで購入から管理まで行うeSIM&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+&lt;h2&gt;海外eSIMの支払い・返金トラブルはなぜ起こるのか&lt;/h2&gt;
+&lt;p&gt;海外旅行の直前に「よし、eSIMを買っておこう」とスマホをポチポチしていたら、突然の決済エラー。私自身、空港のラウンジで焦った経験が何度もあります。実はこれ、珍しいことではありません。海外eSIMの多くは海外に拠点を置く事業者が発行しており、決済処理も海外の決済代行会社を経由することが一般的です。国内のショッピングサイトとは違い、通貨換算やカード会社側の海外利用判定が絡んでくるため、普段使い慣れたクレジットカードでも急にエラーになったり、確認のための保留(いわゆる仮売上)が二重の請求のように見えてしまったりすることがあります。まずは「海外決済特有の仕組みが間に挟まっている」という前提を理解しておくと、いざという時に落ち着いて対処できます。&lt;/p&gt;
+
+&lt;h2&gt;クレジットカードが通らない時に確認すべきポイント&lt;/h2&gt;
+&lt;p&gt;決済エラーが出ると「カードが使えないんじゃないか」と焦ってしまいますが、実はカード側の設定や入力ミスが原因であることが多いです。私も一度、海外利用制限をかけたままのカードで何度もエラーを出し、現地でパケット難民になりかけたことがあります。まず確認したいのは以下の点です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;カード会社の海外利用・オンライン利用の制限設定が有効になっていないか&lt;/li&gt;
+&lt;li&gt;カード番号・有効期限・セキュリティコードの入力ミスがないか&lt;/li&gt;
+&lt;li&gt;3Dセキュア(本人認証)の設定がされているか、認証画面が正しく表示されているか&lt;/li&gt;
+&lt;li&gt;利用限度額に達していないか、他の決済と重なっていないか&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらは購入前にカード会社のアプリや会員サイトで確認できることが多いので、旅行前の下準備として一度目を通しておくと安心です。決済方法や対応状況はサービスごとに異なるため、詳細は必ず公式サイトで確認してください。&lt;/p&gt;
+
+&lt;h2&gt;二重請求(重複決済)が発生した場合の確認と対処手順&lt;/h2&gt;
+&lt;p&gt;「あれ、同じ金額が2回引き落とされている…」というのは、海外eSIM購入者からよく聞く相談です。これは決済エラーの再試行や、通信環境の不安定さによる二重送信が原因になることが多いのですが、実際には「仮売上」と「確定売上」が両方表示されているだけで、最終的には一本化されるケースも少なくありません。慌てて問い合わせる前に、まずは以下を準備しましょう。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;カード利用明細のスクリーンショット(日時・金額・加盟店名が分かるもの)&lt;/li&gt;
+&lt;li&gt;購入時に届いた注文確認メールや領収書&lt;/li&gt;
+&lt;li&gt;請求が発生した日時の突合(数日待って確定請求に統一されないかの確認)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;実体験として、数日〜1週間程度で片方の請求が消えていたこともありました。それでも解消しない場合は、証拠を揃えたうえでサポート窓口に「いつ・いくらの請求が2件表示されているか」を具体的に伝えると、対応がスムーズに進みやすくなります。&lt;/p&gt;
+
+&lt;h2&gt;購入したのに開通しない・アクティベートできない時の申請手順&lt;/h2&gt;
+&lt;p&gt;eSIMは物理的なカードがない分、「買ったのに使えない」という状況が起きやすいのも事実です。よくあるのは、QRコードの読み込み失敗、インストール可能な期限を過ぎてしまったケース、端末側のeSIM対応設定が不十分だったケースです。私も現地に着いてから設定しようとして、有効期限切れで真っ青になったことがあります。海外eSIMは購入後すぐではなく、現地到着前後にインストールするタイプが多いため、事前に手順を確認しておくことが大切です。&lt;/p&gt;
+&lt;p&gt;もし開通できない場合にサポートへ申請する際は、以下の情報をまとめておくとスムーズです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注文番号・購入時のメールアドレス&lt;/li&gt;
+&lt;li&gt;利用端末の機種名・OSバージョン&lt;/li&gt;
+&lt;li&gt;QRコード読み込み時や設定時に表示されたエラーメッセージのスクリーンショット&lt;/li&gt;
+&lt;li&gt;いつ、どの手順でつまずいたかの時系列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;「情報が多すぎるかな」と思うくらい揃えておいた方が、サポート側も原因を特定しやすく、結果的に解決が早まります。&lt;/p&gt;
+
+&lt;h2&gt;返金・キャンセルを申請する際に知っておきたい基本ルール&lt;/h2&gt;
+&lt;p&gt;返金については「使えなかったら全額返ってくる」と思い込んでいる方も多いのですが、実際にはサービスごとに細かい条件が定められています。一般的な傾向として、未使用・未開通であれば返金対象になりやすい一方、一度でも通信を開始してしまうと対象外になるケースが多いです。また、申請できる期限が購入から一定期間内と決められていることも珍しくありません。&lt;/p&gt;
+&lt;p&gt;返金対象外になりやすい典型例としては、以下のようなものが挙げられます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;すでにデータ通信を利用開始している場合&lt;/li&gt;
+&lt;li&gt;申請期限を過ぎてしまった場合&lt;/li&gt;
+&lt;li&gt;端末側の設定不備(そもそもeSIM非対応端末だったなど)が原因の場合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;こうした条件は事業者ごとに異なるため、「だいたいこんな感じだろう」と思い込まず、購入前に利用規約や返金ポリシーのページを一読しておくことを強くおすすめします。具体的な条件・期限は必ず公式サイトで確認してください。&lt;/p&gt;
+
+&lt;!-- demon-cta:mid --&gt;&lt;p style=&quot;margin:1.5em 0;padding:0.6em 1em;border-left:4px solid #90a4ae;background:#f7fafc;font-size:0.95em;&quot;&gt;行き先のプランがあるかは、&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;(WEBサイトから購入可)か&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;で国名を選ぶと確かめられます。&lt;/p&gt;
+&lt;h2&gt;サポート窓口へ問い合わせる際に伝えるべき情報とコツ&lt;/h2&gt;
+&lt;p&gt;海外eSIMのサポートは、チャットやメールが中心になることが多く、時差の関係で返信に時間がかかることもあります。だからこそ、一回のやり取りで的確に状況を伝えることが解決への近道です。私が意識しているのは「感情より事実を先に書く」ことです。焦って「使えない!どうなってるんですか!」と送るより、次のような情報を淡々と並べた方が、結果的に早く解決します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注文履歴(注文番号・購入日・購入金額)&lt;/li&gt;
+&lt;li&gt;発生している症状(いつ、どの画面で、どんなエラーが出たか)&lt;/li&gt;
+&lt;li&gt;試した対処(再起動した、再インストールした等)&lt;/li&gt;
+&lt;li&gt;使用端末の機種・OSバージョン&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文面は簡潔で構いませんが、「〜という手順で、〜というエラーが出ました」と時系列で書くと、サポート担当者も状況をイメージしやすくなります。スクリーンショットは一枚あるだけで説得力が大きく変わりますので、エラーが出た瞬間はまず撮っておく、という習慣をつけておくと安心です。&lt;/p&gt;
+
+&lt;h2&gt;トラブルを未然に防ぐための購入前チェックリスト&lt;/h2&gt;
+&lt;p&gt;結局のところ、一番良いのは「トラブルが起きにくい買い方」をすることです。旅行前のバタバタした時間の中でも、以下のポイントだけは目を通しておくと、当日の焦りがぐっと減ります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;利用予定のクレジットカードが海外決済・オンライン決済に対応しているか&lt;/li&gt;
+&lt;li&gt;自分の端末がeSIMに対応しているか、対応モデル・OSバージョンかどうか&lt;/li&gt;
+&lt;li&gt;購入から開通までの有効期限や手順を事前に確認しているか&lt;/li&gt;
+&lt;li&gt;返金・キャンセルポリシー、問い合わせ窓口の連絡先を確認しているか&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;特に端末の対応状況や周波数帯などの技術的な仕様は、モデルや購入国によって異なることがあるため、思い込みで判断せず必ず公式サイトで確認する癖をつけておきましょう。この一手間が、現地でのトラブルを大きく減らしてくれます。&lt;/p&gt;
+
+&lt;h2&gt;まとめ:トラブル発生時に慌てないための心構え&lt;/h2&gt;
+&lt;p&gt;海外eSIMの支払い・返金トラブルは、決済の仕組みや端末設定など、いくつかの「よくある原因」に整理できます。クレカが通らない時は設定や入力ミスを疑い、二重請求は証拠を揃えてから問い合わせ、未開通の時は端末情報とエラー画面をセットで準備する。そして何より、返金ポリシーや問い合わせ先は購入前に確認しておく。これだけでも、いざという時の対応スピードは大きく変わります。&lt;/p&gt;
+&lt;p&gt;私自身、何度も冷や汗をかいてきましたが、結局のところ「記録を残す」「事実を淡々と伝える」「事前に規約を読んでおく」という地味な積み重ねが、一番の解決策だと感じています。旅先での通信トラブルは焦りがちですが、落ち着いて一つずつ確認していけば、意外と解決の糸口は見つかるものです。&lt;/p&gt;
+
+&lt;h2&gt;Q&amp;amp;A&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Q1. クレジットカードが何度やっても通りません。どうすればいいですか?&lt;/strong&gt;&lt;br&gt;
+まずはカード会社の海外利用・オンライン利用制限がかかっていないか確認しましょう。それでも解決しない場合は、別のカードや決済手段(対応していれば)を試す、あるいは時間を置いて再度試すことも有効です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q2. 二重請求されているか不安ですが、どのタイミングで問い合わせるべきですか?&lt;/strong&gt;&lt;br&gt;
+仮売上と確定売上が両方表示され、数日経っても解消しない場合に問い合わせるのがおすすめです。焦って即日問い合わせるより、明細のスクリーンショットを保存しつつ数日様子を見た方がスムーズに解決することもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q3. 返金してもらえるか不安な場合、購入前に何を確認すればいいですか?&lt;/strong&gt;&lt;br&gt;
+利用規約や返金ポリシーのページで、返金対象となる条件・申請期限・対象外になるケースを確認しておきましょう。事業者によって基準が異なるため、思い込みで判断せず必ず公式サイトの記載を確認することが大切です。&lt;/p&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;この記事の内容に対応している主な海外eSIMサービス&lt;/p&gt;&lt;p style=&quot;font-size:0.9em;margin:0 0 0.5em;&quot;&gt;実際にeSIMを使ってみる場合は、以下の各社公式サイト/アプリで渡航先のプラン・最新料金をご確認ください。&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;: 世界の幅広い国・地域に対応する大手eSIMストア。アプリを入れなくても、公式のWEBサイト(ブラウザ)から購入できます&lt;/li&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;: Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する&lt;/li&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892709163&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;グローバルWiFi&lt;/a&gt;: eSIMではなく海外WiFiレンタル。2人以上で通信を分け合う・eSIM非対応の端末を使う場合の選択肢(空港などで受け取り・返却)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;!-- demon-next-read --&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;次に読む:これから買う方へ(国別の比較・選び方)&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/09/12/160114&quot;&gt;海外ネットはeSIM・レンタルWiFi・ローミングどれが安い?選び方の分岐&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/10/15/110708&quot;&gt;アメリカeSIMの料金比較|airaloとSailyで日数の刻みはどう効く?&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;!-- related-articles-block:start --&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;関連記事&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/08/12/131227&quot;&gt;海外eSIMのテザリングは使える?家族・複数人シェアの注意点&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/08/11/124951&quot;&gt;海外eSIM・ポケットWi-Fi・ローミングの違いと選び方&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/07/17/112536&quot;&gt;海外eSIM比較|トリファ・airalo・Saily徹底比較【失敗しない選び方】&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;!-- related-articles-block:end --&gt;&lt;hr&gt;&lt;p style=&quot;font-size:0.85em;color:#666;&quot;&gt;※本記事は一般的な仕組み・手順の解説であり、特定サービスの料金・提供条件を保証するものではありません。ご利用前に必ず各社公式サイト/アプリで最新情報をご確認ください。&lt;br&gt;本記事はバリューコマースのアフィリエイトプログラムを利用しており、記事内リンクを経由してお申し込みされた場合、当サイトが紹介料を受け取ることがあります。&lt;/p&gt;</content>
+<hatena:formatted-content type="text/html" xmlns:hatena="http://www.hatena.ne.jp/info/xmlns#">&lt;p style=&quot;display:none&quot;&gt;海外eSIMでクレカが通らない、二重請求される、届いたのに開通しないといったトラブルの原因と対処法を解説。返金・キャンセル申請の条件やサポート窓口への伝え方まで実体験を交えて詳しく紹介します。&lt;/p&gt;
+&lt;p style=&quot;font-size:0.95em;color:#444;font-weight:bold;margin:0 0 1.2em;&quot;&gt;【PR】本記事はプロモーションを含みます。&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://images.pexels.com/photos/20805605/pexels-photo-20805605.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;h=650&amp;amp;w=940&quot; alt=&quot;海外eSIMの支払い・返金トラブル対処法|クレカが通らない・二重請求・未開通時の申請手順&quot; loading=&quot;lazy&quot; style=&quot;max-width:100%;height:auto;border-radius:6px;&quot;&gt;&lt;br&gt;&lt;small style=&quot;color:#999;&quot;&gt;Photo by &lt;a href=&quot;https://www.pexels.com/@jacob-2102693&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Jacob&lt;/a&gt; on &lt;a href=&quot;https://www.pexels.com/photo/smartphone-suitcase-and-passport-20805605/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Pexels&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://images.pexels.com/photos/15068317/pexels-photo-15068317.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;h=650&amp;amp;w=940&quot; alt=&quot;海外eSIMの支払い・返金トラブル対処法|クレカが通らない・二重請求・未開通時の申請手順&quot; loading=&quot;lazy&quot; style=&quot;max-width:100%;height:auto;border-radius:6px;&quot;&gt;&lt;br&gt;&lt;small style=&quot;color:#999;&quot;&gt;Photo by &lt;a href=&quot;https://www.pexels.com/@towfiqu-barbhuiya-3440682&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Towfiqu barbhuiya&lt;/a&gt; on &lt;a href=&quot;https://www.pexels.com/photo/person-holding-a-phone-15068317/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;Pexels&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;div style=&quot;margin:1.2em 0;padding:0.8em 1em;border:1px solid #cfd8dc;border-radius:4px;background:#f7fafc;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.4em;&quot;&gt;先に公式ページを見ておきたい方へ&lt;/p&gt;&lt;p style=&quot;margin:0;font-size:0.95em;&quot;&gt;このブログで比べている海外eSIMは次の2つです。料金や対応国は変わることがあるので、決める前に公式ページで今の内容を確かめてください。&lt;/p&gt;&lt;ul style=&quot;margin:0.4em 0 0;padding-left:1.2em;font-size:0.95em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;: アプリを入れなくても、公式のWEBサイト(ブラウザ)から購入できます&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;: アプリで購入から管理まで行うeSIM&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+&lt;h2 id=&quot;海外eSIMの支払い返金トラブルはなぜ起こるのか&quot;&gt;海外eSIMの支払い・返金トラブルはなぜ起こるのか&lt;/h2&gt;
+&lt;p&gt;海外旅行の直前に「よし、eSIMを買っておこう」とスマホをポチポチしていたら、突然の決済エラー。私自身、空港のラウンジで焦った経験が何度もあります。実はこれ、珍しいことではありません。海外eSIMの多くは海外に拠点を置く事業者が発行しており、決済処理も海外の決済代行会社を経由することが一般的です。国内のショッピングサイトとは違い、通貨換算やカード会社側の海外利用判定が絡んでくるため、普段使い慣れたクレジットカードでも急にエラーになったり、確認のための保留(いわゆる仮売上)が二重の請求のように見えてしまったりすることがあります。まずは「海外決済特有の仕組みが間に挟まっている」という前提を理解しておくと、いざという時に落ち着いて対処できます。&lt;/p&gt;
+
+&lt;h2 id=&quot;クレジットカードが通らない時に確認すべきポイント&quot;&gt;クレジットカードが通らない時に確認すべきポイント&lt;/h2&gt;
+&lt;p&gt;決済エラーが出ると「カードが使えないんじゃないか」と焦ってしまいますが、実はカード側の設定や入力ミスが原因であることが多いです。私も一度、海外利用制限をかけたままのカードで何度もエラーを出し、現地でパケット難民になりかけたことがあります。まず確認したいのは以下の点です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;カード会社の海外利用・オンライン利用の制限設定が有効になっていないか&lt;/li&gt;
+&lt;li&gt;カード番号・有効期限・セキュリティコードの入力ミスがないか&lt;/li&gt;
+&lt;li&gt;3Dセキュア(本人認証)の設定がされているか、認証画面が正しく表示されているか&lt;/li&gt;
+&lt;li&gt;利用限度額に達していないか、他の決済と重なっていないか&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらは購入前にカード会社のアプリや会員サイトで確認できることが多いので、旅行前の下準備として一度目を通しておくと安心です。決済方法や対応状況はサービスごとに異なるため、詳細は必ず公式サイトで確認してください。&lt;/p&gt;
+
+&lt;h2 id=&quot;二重請求重複決済が発生した場合の確認と対処手順&quot;&gt;二重請求(重複決済)が発生した場合の確認と対処手順&lt;/h2&gt;
+&lt;p&gt;「あれ、同じ金額が2回引き落とされている…」というのは、海外eSIM購入者からよく聞く相談です。これは決済エラーの再試行や、通信環境の不安定さによる二重送信が原因になることが多いのですが、実際には「仮売上」と「確定売上」が両方表示されているだけで、最終的には一本化されるケースも少なくありません。慌てて問い合わせる前に、まずは以下を準備しましょう。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;カード利用明細のスクリーンショット(日時・金額・加盟店名が分かるもの)&lt;/li&gt;
+&lt;li&gt;購入時に届いた注文確認メールや領収書&lt;/li&gt;
+&lt;li&gt;請求が発生した日時の突合(数日待って確定請求に統一されないかの確認)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;実体験として、数日〜1週間程度で片方の請求が消えていたこともありました。それでも解消しない場合は、証拠を揃えたうえでサポート窓口に「いつ・いくらの請求が2件表示されているか」を具体的に伝えると、対応がスムーズに進みやすくなります。&lt;/p&gt;
+
+&lt;h2 id=&quot;購入したのに開通しないアクティベートできない時の申請手順&quot;&gt;購入したのに開通しない・アクティベートできない時の申請手順&lt;/h2&gt;
+&lt;p&gt;eSIMは物理的なカードがない分、「買ったのに使えない」という状況が起きやすいのも事実です。よくあるのは、QRコードの読み込み失敗、インストール可能な期限を過ぎてしまったケース、端末側のeSIM対応設定が不十分だったケースです。私も現地に着いてから設定しようとして、有効期限切れで真っ青になったことがあります。海外eSIMは購入後すぐではなく、現地到着前後にインストールするタイプが多いため、事前に手順を確認しておくことが大切です。&lt;/p&gt;
+&lt;p&gt;もし開通できない場合にサポートへ申請する際は、以下の情報をまとめておくとスムーズです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注文番号・購入時のメールアドレス&lt;/li&gt;
+&lt;li&gt;利用端末の機種名・OSバージョン&lt;/li&gt;
+&lt;li&gt;QRコード読み込み時や設定時に表示されたエラーメッセージのスクリーンショット&lt;/li&gt;
+&lt;li&gt;いつ、どの手順でつまずいたかの時系列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;「情報が多すぎるかな」と思うくらい揃えておいた方が、サポート側も原因を特定しやすく、結果的に解決が早まります。&lt;/p&gt;
+
+&lt;h2 id=&quot;返金キャンセルを申請する際に知っておきたい基本ルール&quot;&gt;返金・キャンセルを申請する際に知っておきたい基本ルール&lt;/h2&gt;
+&lt;p&gt;返金については「使えなかったら全額返ってくる」と思い込んでいる方も多いのですが、実際にはサービスごとに細かい条件が定められています。一般的な傾向として、未使用・未開通であれば返金対象になりやすい一方、一度でも通信を開始してしまうと対象外になるケースが多いです。また、申請できる期限が購入から一定期間内と決められていることも珍しくありません。&lt;/p&gt;
+&lt;p&gt;返金対象外になりやすい典型例としては、以下のようなものが挙げられます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;すでにデータ通信を利用開始している場合&lt;/li&gt;
+&lt;li&gt;申請期限を過ぎてしまった場合&lt;/li&gt;
+&lt;li&gt;端末側の設定不備(そもそもeSIM非対応端末だったなど)が原因の場合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;こうした条件は事業者ごとに異なるため、「だいたいこんな感じだろう」と思い込まず、購入前に利用規約や返金ポリシーのページを一読しておくことを強くおすすめします。具体的な条件・期限は必ず公式サイトで確認してください。&lt;/p&gt;
+
+&lt;p style=&quot;margin:1.5em 0;padding:0.6em 1em;border-left:4px solid #90a4ae;background:#f7fafc;font-size:0.95em;&quot;&gt;行き先のプランがあるかは、&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;(WEBサイトから購入可)か&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;で国名を選ぶと確かめられます。&lt;/p&gt;
+&lt;h2 id=&quot;サポート窓口へ問い合わせる際に伝えるべき情報とコツ&quot;&gt;サポート窓口へ問い合わせる際に伝えるべき情報とコツ&lt;/h2&gt;
+&lt;p&gt;海外eSIMのサポートは、チャットやメールが中心になることが多く、時差の関係で返信に時間がかかることもあります。だからこそ、一回のやり取りで的確に状況を伝えることが解決への近道です。私が意識しているのは「感情より事実を先に書く」ことです。焦って「使えない!どうなってるんですか!」と送るより、次のような情報を淡々と並べた方が、結果的に早く解決します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注文履歴(注文番号・購入日・購入金額)&lt;/li&gt;
+&lt;li&gt;発生している症状(いつ、どの画面で、どんなエラーが出たか)&lt;/li&gt;
+&lt;li&gt;試した対処(再起動した、再インストールした等)&lt;/li&gt;
+&lt;li&gt;使用端末の機種・OSバージョン&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文面は簡潔で構いませんが、「〜という手順で、〜というエラーが出ました」と時系列で書くと、サポート担当者も状況をイメージしやすくなります。スクリーンショットは一枚あるだけで説得力が大きく変わりますので、エラーが出た瞬間はまず撮っておく、という習慣をつけておくと安心です。&lt;/p&gt;
+
+&lt;h2 id=&quot;トラブルを未然に防ぐための購入前チェックリスト&quot;&gt;トラブルを未然に防ぐための購入前チェックリスト&lt;/h2&gt;
+&lt;p&gt;結局のところ、一番良いのは「トラブルが起きにくい買い方」をすることです。旅行前のバタバタした時間の中でも、以下のポイントだけは目を通しておくと、当日の焦りがぐっと減ります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;利用予定のクレジットカードが海外決済・オンライン決済に対応しているか&lt;/li&gt;
+&lt;li&gt;自分の端末がeSIMに対応しているか、対応モデル・OSバージョンかどうか&lt;/li&gt;
+&lt;li&gt;購入から開通までの有効期限や手順を事前に確認しているか&lt;/li&gt;
+&lt;li&gt;返金・キャンセルポリシー、問い合わせ窓口の連絡先を確認しているか&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;特に端末の対応状況や周波数帯などの技術的な仕様は、モデルや購入国によって異なることがあるため、思い込みで判断せず必ず公式サイトで確認する癖をつけておきましょう。この一手間が、現地でのトラブルを大きく減らしてくれます。&lt;/p&gt;
+
+&lt;h2 id=&quot;まとめトラブル発生時に慌てないための心構え&quot;&gt;まとめ:トラブル発生時に慌てないための心構え&lt;/h2&gt;
+&lt;p&gt;海外eSIMの支払い・返金トラブルは、決済の仕組みや端末設定など、いくつかの「よくある原因」に整理できます。クレカが通らない時は設定や入力ミスを疑い、二重請求は証拠を揃えてから問い合わせ、未開通の時は端末情報とエラー画面をセットで準備する。そして何より、返金ポリシーや問い合わせ先は購入前に確認しておく。これだけでも、いざという時の対応スピードは大きく変わります。&lt;/p&gt;
+&lt;p&gt;私自身、何度も冷や汗をかいてきましたが、結局のところ「記録を残す」「事実を淡々と伝える」「事前に規約を読んでおく」という地味な積み重ねが、一番の解決策だと感じています。旅先での通信トラブルは焦りがちですが、落ち着いて一つずつ確認していけば、意外と解決の糸口は見つかるものです。&lt;/p&gt;
+
+&lt;h2 id=&quot;QA&quot;&gt;Q&amp;amp;A&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Q1. クレジットカードが何度やっても通りません。どうすればいいですか?&lt;/strong&gt;&lt;br&gt;
+まずはカード会社の海外利用・オンライン利用制限がかかっていないか確認しましょう。それでも解決しない場合は、別のカードや決済手段(対応していれば)を試す、あるいは時間を置いて再度試すことも有効です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q2. 二重請求されているか不安ですが、どのタイミングで問い合わせるべきですか?&lt;/strong&gt;&lt;br&gt;
+仮売上と確定売上が両方表示され、数日経っても解消しない場合に問い合わせるのがおすすめです。焦って即日問い合わせるより、明細のスクリーンショットを保存しつつ数日様子を見た方がスムーズに解決することもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q3. 返金してもらえるか不安な場合、購入前に何を確認すればいいですか?&lt;/strong&gt;&lt;br&gt;
+利用規約や返金ポリシーのページで、返金対象となる条件・申請期限・対象外になるケースを確認しておきましょう。事業者によって基準が異なるため、思い込みで判断せず必ず公式サイトの記載を確認することが大切です。&lt;/p&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;この記事の内容に対応している主な海外eSIMサービス&lt;/p&gt;&lt;p style=&quot;font-size:0.9em;margin:0 0 0.5em;&quot;&gt;実際にeSIMを使ってみる場合は、以下の各社公式サイト/アプリで渡航先のプラン・最新料金をご確認ください。&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657920&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;airalo&lt;/a&gt;: 世界の幅広い国・地域に対応する大手eSIMストア。アプリを入れなくても、公式のWEBサイト(ブラウザ)から購入できます&lt;/li&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892657921&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;Saily&lt;/a&gt;: Nord Security(NordVPN)系列のeSIMサービス。アプリで購入から管理まで完結する&lt;/li&gt;&lt;li style=&quot;margin:0.4em 0;&quot;&gt;&lt;a href=&quot;https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3775807&amp;amp;pid=892709163&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener sponsored&quot;&gt;グローバルWiFi&lt;/a&gt;: eSIMではなく海外WiFiレンタル。2人以上で通信を分け合う・eSIM非対応の端末を使う場合の選択肢(空港などで受け取り・返却)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;次に読む:これから買う方へ(国別の比較・選び方)&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/09/12/160114&quot;&gt;海外ネットはeSIM・レンタルWiFi・ローミングどれが安い?選び方の分岐&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/10/15/110708&quot;&gt;アメリカeSIMの料金比較|airaloとSailyで日数の刻みはどう効く?&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div style=&quot;margin:2em 0;padding:1em 1.2em;border:1px solid #ddd;border-radius:4px;&quot;&gt;&lt;p style=&quot;font-weight:bold;margin:0 0 0.5em;&quot;&gt;関連記事&lt;/p&gt;&lt;ul style=&quot;margin:0;padding-left:1.2em;&quot;&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/08/12/131227&quot;&gt;海外eSIMのテザリングは使える?家族・複数人シェアの注意点&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/08/11/124951&quot;&gt;海外eSIM・ポケットWi-Fi・ローミングの違いと選び方&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://magicaidemon.hatenablog.com/entry/2026/07/17/112536&quot;&gt;海外eSIM比較|トリファ・airalo・Saily徹底比較【失敗しない選び方】&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;hr&gt;&lt;p style=&quot;font-size:0.85em;color:#666;&quot;&gt;※本記事は一般的な仕組み・手順の解説であり、特定サービスの料金・提供条件を保証するものではありません。ご利用前に必ず各社公式サイト/アプリで最新情報をご確認ください。&lt;br&gt;本記事はバリューコマースのアフィリエイトプログラムを利用しており、記事内リンクを経由してお申し込みされた場合、当サイトが紹介料を受け取ることがあります。&lt;/p&gt;</hatena:formatted-content>
+
+<category term="選び方ガイド" />
+
+<category term="海外eSIM比較" />
+
+<app:control>
+  <app:draft>no</app:draft>
+  <app:preview>no</app:preview>
+  
+</app:control>
+
+</entry>
